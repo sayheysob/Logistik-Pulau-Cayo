@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Anggota - Trans Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="bg-blue-700 text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Data Anggota</h1>
+    <a href="index.html" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">Kembali ke Dashboard</a>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-6 py-10">
+    <h2 class="text-2xl font-semibold mb-6">Daftar Anggota</h2>
+
+    <div class="mb-4 flex justify-between items-center">
+      <input type="text" placeholder="Cari nama anggota..." class="border border-gray-300 px-4 py-2 rounded w-1/2">
+      <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Tambah Anggota</button>
+    </div>
+
+    <!-- Tabel Anggota -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white rounded-xl shadow">
+        <thead class="bg-blue-600 text-white">
+          <tr>
+            <th class="py-3 px-4 text-left">Nama</th>
+            <th class="py-3 px-4 text-left">Posisi</th>
+            <th class="py-3 px-4 text-left">Status</th>
+            <th class="py-3 px-4 text-left">Duty</th>
+            <th class="py-3 px-4 text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4">Nansu S Harmony</td>
+            <td class="py-3 px-4">Driver</td>
+            <td class="py-3 px-4 text-yellow-500 font-medium">Training</td>
+            <td class="py-3 px-4">Off Duty</td>
+            <td class="py-3 px-4 text-center space-x-2">
+              <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Detail</button>
+              <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">Edit</button>
+              <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm">Hapus</button>
+            </td>
+          </tr>
+
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4">Dewi Rahayu</td>
+            <td class="py-3 px-4">Petugas</td>
+            <td class="py-3 px-4 text-green-600 font-medium">Aktif</td>
+            <td class="py-3 px-4">On Duty</td>
+            <td class="py-3 px-4 text-center space-x-2">
+              <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Detail</button>
+              <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">Edit</button>
+              <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm">Hapus</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50">
+            <td class="py-3 px-4">Budi Santoso</td>
+            <td class="py-3 px-4">Staff</td>
+            <td class="py-3 px-4 text-gray-500 font-medium">Nonaktif</td>
+            <td class="py-3 px-4">Resign</td>
+            <td class="py-3 px-4 text-center space-x-2">
+              <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Detail</button>
+              <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">Edit</button>
+              <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm">Hapus</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="text-center py-4 text-gray-500 text-sm">
+    &copy; 2025 Trans Management System
+  </footer>
+
+</body>
+</html>
