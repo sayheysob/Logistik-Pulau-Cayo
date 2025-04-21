@@ -160,14 +160,6 @@
               account.email === email && account.password === password
             );
             
-            if (validUser) {
-              // Store login state if remember me is checked
-              if (rememberMe) {
-                localStorage.setItem('rememberedEmail', email);
-              } else {
-                localStorage.removeItem('rememberedEmail');
-              }
-              
               // Redirect to dashboard
               window.location.href = 'dashboard.html';
             } else {
