@@ -52,19 +52,14 @@
         <h2 class="text-2xl font-semibold text-gray-800">Daftar Anggota</h2>
         <p class="text-gray-500 mt-1">Kelola data anggota tim Logistik Pulau Cayo</p>
       </div>
-      <div class="flex items-center gap-4">
-        <div class="relative">
-          <input 
-            type="text" 
-            placeholder="Cari nama anggota..." 
-            class="border border-gray-300 px-4 py-2 pl-10 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          >
-          <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-        </div>
-        <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2">
-          <i class="fas fa-plus"></i>
-          <span>Tambah Anggota</span>
-        </button>
+      <div class="relative">
+        <input 
+          type="text" 
+          id="searchInput"
+          placeholder="Cari nama anggota..." 
+          class="border border-gray-300 px-4 py-2 pl-10 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        >
+        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
       </div>
     </div>
 
@@ -76,37 +71,25 @@
             <th class="py-4 px-6 text-left rounded-tl-xl">Nama</th>
             <th class="py-4 px-6 text-left">Posisi</th>
             <th class="py-4 px-6 text-left">Status</th>
-            <th class="py-4 px-6 text-left">Duty</th>
-            <th class="py-4 px-6 text-center rounded-tr-xl">Aksi</th>
+            <th class="py-4 px-6 text-left rounded-tr-xl">Duty</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
+        <tbody id="anggotaTable" class="divide-y divide-gray-200">
           <tr class="hover:bg-gray-50 transition duration-150">
             <td class="py-4 px-6">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
                   <i class="fas fa-user"></i>
                 </div>
-                <span>Nansu S Harmony</span>
+                <span class="nama">Nansu S Harmony</span>
               </div>
             </td>
-            <td class="py-4 px-6">Driver</td>
+            <td class="py-4 px-6 posisi">Driver</td>
             <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">Training</span>
+              <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
             </td>
             <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">Off Duty</span>
-            </td>
-            <td class="py-4 px-6 text-center space-x-2">
-              <button class="bg-primary-100 hover:bg-primary-200 text-primary-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-trash-alt"></i>
-              </button>
+              <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
             </td>
           </tr>
 
@@ -116,26 +99,15 @@
                 <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
                   <i class="fas fa-user"></i>
                 </div>
-                <span>Dewi Rahayu</span>
+                <span class="nama">Dewi Rahayu</span>
               </div>
             </td>
-            <td class="py-4 px-6">Petugas</td>
+            <td class="py-4 px-6 posisi">Petugas</td>
             <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">Aktif</span>
+              <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 status">Aktif</span>
             </td>
             <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">On Duty</span>
-            </td>
-            <td class="py-4 px-6 text-center space-x-2">
-              <button class="bg-primary-100 hover:bg-primary-200 text-primary-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-trash-alt"></i>
-              </button>
+              <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 duty">On Duty</span>
             </td>
           </tr>
 
@@ -145,26 +117,15 @@
                 <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
                   <i class="fas fa-user"></i>
                 </div>
-                <span>Budi Santoso</span>
+                <span class="nama">Budi Santoso</span>
               </div>
             </td>
-            <td class="py-4 px-6">Staff</td>
+            <td class="py-4 px-6 posisi">Staff</td>
             <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">Nonaktif</span>
+              <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 status">Nonaktif</span>
             </td>
             <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">Resign</span>
-            </td>
-            <td class="py-4 px-6 text-center space-x-2">
-              <button class="bg-primary-100 hover:bg-primary-200 text-primary-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-lg transition duration-200">
-                <i class="fas fa-trash-alt"></i>
-              </button>
+              <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 duty">Resign</span>
             </td>
           </tr>
         </tbody>
@@ -174,7 +135,7 @@
     <!-- Pagination -->
     <div class="mt-6 flex justify-between items-center">
       <div class="text-sm text-gray-500">
-        Menampilkan 1-3 dari 3 anggota
+        Menampilkan <span id="showingCount">3</span> dari 3 anggota
       </div>
       <div class="flex gap-2">
         <button class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100">
@@ -196,5 +157,33 @@
     </div>
   </footer>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('searchInput');
+      const anggotaTable = document.getElementById('anggotaTable');
+      const showingCount = document.getElementById('showingCount');
+      const rows = anggotaTable.getElementsByTagName('tr');
+      
+      // Fungsi pencarian
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        let visibleCount = 0;
+        
+        for (let i = 0; i < rows.length; i++) {
+          const nama = rows[i].querySelector('.nama').textContent.toLowerCase();
+          const posisi = rows[i].querySelector('.posisi').textContent.toLowerCase();
+          
+          if (nama.includes(searchTerm) || posisi.includes(searchTerm)) {
+            rows[i].style.display = '';
+            visibleCount++;
+          } else {
+            rows[i].style.display = 'none';
+          }
+        }
+        
+        showingCount.textContent = visibleCount;
+      });
+    });
+  </script>
 </body>
 </html>
