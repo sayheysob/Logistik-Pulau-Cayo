@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-  <!-- Header -->
+  <!-- Header --> 
   <header class="bg-green-700 text-white px-6 py-4 flex justify-between items-center shadow">
     <h1 class="text-xl font-bold">Daftar Anggota</h1>
     <a href="index.html" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-sm">Kembali ke Dashboard</a>
@@ -18,22 +18,16 @@
   <main class="flex-grow max-w-3xl mx-auto p-6 w-full">
     <h2 class="text-2xl font-bold text-center mb-6">LPC Check Log</h2>
 
-    <!-- Search -->
+    <!-- Pilih Anggota -->
     <div class="mb-6">
       <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Nama Anggota LPC</label>
-      <div class="flex gap-2">
-        <input
-          type="text"
-          id="search"
-          value="Nansu S Harmony"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-green-400"
-        />
-        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cari</button>
-      </div>
+      <select id="search" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-green-400">
+        <option selected disabled>Pilih nama anggota...</option>
+      </select>
     </div>
 
     <!-- Profile Card -->
-    <section class="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-xl p-4 mb-6 shadow">
+    <section id="profileCard" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-xl p-4 mb-6 shadow hidden">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 bg-white text-blue-700 flex items-center justify-center rounded-full">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -42,107 +36,105 @@
           </svg>
         </div>
         <div>
-          <p class="text-lg font-semibold">Nansu S Harmony</p>
-          <p class="text-sm text-yellow-200">Training • <span class="text-yellow-400 font-medium">Off Duty</span></p>
+          <p id="nama" class="text-lg font-semibold"></p>
+          <p id="status" class="text-sm text-yellow-200"></p>
         </div>
       </div>
     </section>
 
     <!-- Stats -->
-    <div class="grid grid-cols-2 gap-4 mb-6">
+    <div class="grid grid-cols-2 gap-4 mb-6 hidden" id="stats">
       <div class="bg-gray-100 p-4 rounded-xl text-center shadow-sm">
         <p class="text-sm text-gray-600">Total Jam</p>
-        <p class="text-lg font-bold">0h 0m</p>
+        <p id="totalJam" class="text-lg font-bold">-</p>
       </div>
       <div class="bg-gray-100 p-4 rounded-xl text-center shadow-sm">
         <p class="text-sm text-gray-600">Rata-Rata Jam Harian</p>
-        <p class="text-lg font-bold">0h 0m</p>
+        <p id="rataJam" class="text-lg font-bold">-</p>
       </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="flex flex-wrap gap-2 justify-center mb-6">
-      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">On Duty</button>
-      <button class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Off Duty</button>
-      <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded">Cuti</button>
-      <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Resign</button>
     </div>
 
     <!-- Activity Log -->
-    <section>
+    <section id="aktivitasSection" class="hidden">
       <h3 class="text-lg font-semibold mb-3">Aktivitas Terakhir</h3>
-
-      <div class="bg-white p-4 rounded-xl shadow mb-3">
-        <p class="font-medium text-gray-800">30/03/2025</p>
-        <p class="text-sm">Total Jam: <strong>1h 37m</strong></p>
-        <p class="text-xs text-gray-500">30/03/25 17:22 - 30/03/25 19:00</p>
-      </div>
-
-      <div class="bg-white p-4 rounded-xl shadow mb-3">
-        <p class="font-medium text-gray-800">28/03/2025</p>
-        <p class="text-sm">Total Jam: <strong>0h 13m</strong></p>
-        <p class="text-xs text-gray-500">29/03/25 00:00 - 29/03/25 00:13</p>
-      </div>
+      <div id="aktivitasLog"></div>
     </section>
   </main>
 
-</body>
-  <script src="anggota.js"></script>
 <script>
-  const dropdown = document.getElementById("search");
-  const namaEl = document.querySelector(".text-lg.font-semibold");
-  const statusEl = document.querySelector(".text-sm.text-yellow-200");
-  const totalJamEl = document.querySelectorAll(".text-lg.font-bold")[0];
-  const rataRataEl = document.querySelectorAll(".text-lg.font-bold")[1];
-  const aktivitasContainer = document.querySelector("section:last-of-type");
+  const dataAnggota = [
+    {
+      nama: "Nansu S Harmony",
+      status: "Training",
+      duty: "Off Duty",
+      totalJam: "1h 50m",
+      rataRataJam: "0h 55m",
+      aktivitas: [
+        { tanggal: "30/03/2025", total: "1h 37m", waktu: "30/03/25 17:22 - 30/03/25 19:00" },
+        { tanggal: "28/03/2025", total: "0h 13m", waktu: "29/03/25 00:00 - 29/03/25 00:13" }
+      ]
+    },
+    {
+      nama: "Dewi Rahayu",
+      status: "Aktif",
+      duty: "On Duty",
+      totalJam: "4h 15m",
+      rataRataJam: "2h 7m",
+      aktivitas: []
+    },
+    {
+      nama: "Budi Santoso",
+      status: "Nonaktif",
+      duty: "Resign",
+      totalJam: "0h 0m",
+      rataRataJam: "0h 0m",
+      aktivitas: []
+    }
+  ];
 
-  // Ubah input jadi dropdown
-  dropdown.replaceWith(() => {
-    const select = document.createElement("select");
-    select.id = "search";
-    select.className = "w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-green-400";
-    
-    const defaultOpt = document.createElement("option");
-    defaultOpt.text = "Pilih nama anggota...";
-    defaultOpt.disabled = true;
-    defaultOpt.selected = true;
-    select.appendChild(defaultOpt);
+  const select = document.getElementById("search");
+  const namaEl = document.getElementById("nama");
+  const statusEl = document.getElementById("status");
+  const totalJamEl = document.getElementById("totalJam");
+  const rataJamEl = document.getElementById("rataJam");
+  const aktivitasLog = document.getElementById("aktivitasLog");
 
-    dataAnggota.forEach(a => {
-      const opt = document.createElement("option");
-      opt.value = a.nama;
-      opt.textContent = a.nama;
-      select.appendChild(opt);
-    });
+  const profileCard = document.getElementById("profileCard");
+  const stats = document.getElementById("stats");
+  const aktivitasSection = document.getElementById("aktivitasSection");
 
-    return select;
-  }());
+  // Populate dropdown
+  dataAnggota.forEach(a => {
+    const opt = document.createElement("option");
+    opt.value = a.nama;
+    opt.textContent = a.nama;
+    select.appendChild(opt);
+  });
 
-  // Hapus tombol "Cari"
-  document.querySelector("button").remove();
-
-  // Event listener: Saat dipilih
-  document.getElementById("search").addEventListener("change", (e) => {
-    const anggota = dataAnggota.find(a => a.nama === e.target.value);
+  select.addEventListener("change", function() {
+    const anggota = dataAnggota.find(a => a.nama === this.value);
     if (!anggota) return;
 
     namaEl.textContent = anggota.nama;
     statusEl.innerHTML = `${anggota.status} • <span class="text-yellow-400 font-medium">${anggota.duty}</span>`;
     totalJamEl.textContent = anggota.totalJam;
-    rataRataEl.textContent = anggota.rataRataJam;
+    rataJamEl.textContent = anggota.rataRataJam;
 
-    // Render aktivitas
-    const section = aktivitasContainer;
-    section.innerHTML = `<h3 class="text-lg font-semibold mb-3">Aktivitas Terakhir</h3>`;
+    profileCard.classList.remove("hidden");
+    stats.classList.remove("hidden");
+    aktivitasSection.classList.remove("hidden");
+
+    aktivitasLog.innerHTML = "";
+
     if (anggota.aktivitas.length === 0) {
-      section.innerHTML += `<p class="text-gray-500 text-sm">Tidak ada aktivitas tercatat.</p>`;
+      aktivitasLog.innerHTML = `<p class="text-sm text-gray-500">Tidak ada aktivitas tercatat.</p>`;
     } else {
-      anggota.aktivitas.forEach(log => {
-        section.innerHTML += `
+      anggota.aktivitas.forEach(act => {
+        aktivitasLog.innerHTML += `
           <div class="bg-white p-4 rounded-xl shadow mb-3">
-            <p class="font-medium text-gray-800">${log.tanggal}</p>
-            <p class="text-sm">Total Jam: <strong>${log.total}</strong></p>
-            <p class="text-xs text-gray-500">${log.waktu}</p>
+            <p class="font-medium text-gray-800">${act.tanggal}</p>
+            <p class="text-sm">Total Jam: <strong>${act.total}</strong></p>
+            <p class="text-xs text-gray-500">${act.waktu}</p>
           </div>
         `;
       });
@@ -150,4 +142,5 @@
   });
 </script>
 
+</body>
 </html>
