@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Laporan - Trans Management System</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body class="bg-gray-100">
 
@@ -42,7 +44,7 @@
           </tr>
         </thead>
         <tbody id="laporanBody">
-          <!-- Data Dummy -->
+          <!-- Contoh Data -->
           <tr>
             <td class="py-3 px-4">Nansu S Harmony</td>
             <td class="py-3 px-4">2025-04-20</td>
@@ -84,15 +86,19 @@
 
   <!-- Script -->
   <script>
+    // Hitung Total Jam
     function hitungTotalJam() {
       let total = 0;
       document.querySelectorAll('#laporanBody tr').forEach(row => {
-        const jam = parseFloat(row.children[5].textContent || 0);
-        if (!isNaN(jam)) total += jam;
+        if (row.style.display !== 'none') {
+          const jam = parseFloat(row.children[5].textContent || 0);
+          if (!isNaN(jam)) total += jam;
+        }
       });
       document.getElementById('totalJam').textContent = total;
     }
 
+    // Filter Tabel
     function filterLaporan() {
       const namaInput = document.getElementById('searchNama').value.toLowerCase();
       const bulanInput = document.getElementById('filterBulan').value;
@@ -106,24 +112,34 @@
       hitungTotalJam();
     }
 
+    // Event Listener
     document.getElementById('searchNama').addEventListener('input', filterLaporan);
     document.getElementById('filterBulan').addEventListener('input', filterLaporan);
 
+    // Export ke PDF
     document.getElementById('exportBtn').addEventListener('click', () => {
-      import('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js').then(({ jsPDF }) => {
-        const doc = new jsPDF();
-        doc.text("Laporan Tugas", 10, 10);
-        let y = 20;
-        document.querySelectorAll('#laporanBody tr').forEach(row => {
-          const data = [...row.children].map(td => td.textContent.trim()).join(" | ");
-          doc.text(data, 10, y);
-          y += 10;
-        });
-        doc.save("laporan.pdf");
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("Laporan Tugas", 14, 15);
+
+      const rows = [];
+      document.querySelectorAll('#laporanBody tr').forEach(row => {
+        if (row.style.display !== 'none') {
+          const cols = [...row.children].map(td => td.textContent.trim());
+          rows.push(cols);
+        }
       });
+
+      doc.autoTable({
+        head: [["Nama", "Tanggal", "Tugas", "Masuk", "Keluar", "Total Jam"]],
+        body: rows,
+        startY: 25,
+      });
+
+      doc.save("laporan.pdf");
     });
 
-    // Hitung total saat halaman dibuka
+    // Hitung saat load
     hitungTotalJam();
   </script>
 
