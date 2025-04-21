@@ -22,7 +22,7 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-semibold text-gray-800">Login Sistem</h2>
-        <p class="text-gray-500 mt-1">Masukkan Email & Password Anda</p>
+        <p class="text-gray-500 mt-1">Masukkan kredensial Anda</p>
       </div>
       <form id="loginForm" class="space-y-4">
         <div class="relative">
@@ -53,7 +53,7 @@
           id="loginButton"
           class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-200 flex items-center justify-center"
         >
-          <span id="buttonText">Login</span>
+          <span id="buttonText">On Duty</span>
           <div id="spinner" class="ml-2 hidden">
             <i class="fas fa-circle-notch fa-spin"></i>
           </div>
@@ -73,6 +73,12 @@
       const loginButton = document.getElementById('loginButton');
       const buttonText = document.getElementById('buttonText');
       const spinner = document.getElementById('spinner');
+      
+      // Daftar akun yang valid
+      const validAccounts = [
+        { email: 'user@lpc.com', password: 'user123', role: 'user', redirect: 'dashboard.html' },
+        { email: 'admin@lpc.com', password: 'admin123', role: 'admin', redirect: 'admin.html' }
+      ];
       
       // Toggle password visibility
       togglePassword.addEventListener('click', function() {
@@ -139,22 +145,17 @@
           
           // Simulate API call
           setTimeout(() => {
-            // This is just a demo - replace with actual authentication logic
-            const demoAccounts = [
-              { email: 'admin@cayo.com', password: 'password123' },
-              { email: 'user@cayo.com', password: 'password123' }
-            ];
-            
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
             
-            const validUser = demoAccounts.find(account => 
+            // Cek kecocokan akun
+            const matchedAccount = validAccounts.find(account => 
               account.email === email && account.password === password
             );
             
-            if (validUser) {
-              // Redirect to dashboard
-              window.location.href = 'dashboard.html';
+            if (matchedAccount) {
+              // Redirect berdasarkan role
+              window.location.href = matchedAccount.redirect;
             } else {
               setError(passwordInput, 'Email atau password salah');
               loginButton.disabled = false;
