@@ -22,7 +22,7 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-semibold text-gray-800">Login Sistem</h2>
-        <p class="text-gray-500 mt-1">Masukkan kredensial Anda</p>
+        <p class="text-gray-500 mt-1">Masukkan Email & Password Anda</p>
       </div>
       <form id="loginForm" class="space-y-4">
         <div class="relative">
@@ -48,19 +48,12 @@
             <i class="fas fa-eye"></i>
           </button>
         </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <input type="checkbox" id="remember" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
-            <label for="remember" class="ml-2 block text-sm text-gray-700">Ingat saya</label>
-          </div>
-          <a href="#" class="text-sm text-green-600 hover:text-green-800">Lupa password?</a>
-        </div>
         <button
           type="submit"
           id="loginButton"
           class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-200 flex items-center justify-center"
         >
-          <span id="buttonText">On Duty</span>
+          <span id="buttonText">Login</span>
           <div id="spinner" class="ml-2 hidden">
             <i class="fas fa-circle-notch fa-spin"></i>
           </div>
@@ -154,12 +147,12 @@
             
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
-            const rememberMe = document.getElementById('remember').checked;
             
             const validUser = demoAccounts.find(account => 
               account.email === email && account.password === password
             );
             
+            if (validUser) {
               // Redirect to dashboard
               window.location.href = 'dashboard.html';
             } else {
@@ -171,13 +164,6 @@
           }, 1500);
         }
       });
-      
-      // Check for remembered email
-      const rememberedEmail = localStorage.getItem('rememberedEmail');
-      if (rememberedEmail) {
-        emailInput.value = rememberedEmail;
-        document.getElementById('remember').checked = true;
-      }
     });
   </script>
 </body>
