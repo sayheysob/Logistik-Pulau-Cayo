@@ -1,32 +1,24 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>LPC Check Log</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="anggota.js"></script>
-</head>
-<body class="bg-gray-100">
-  <main class="max-w-3xl mx-auto p-6">
-    <label class="block mb-2 font-medium">Nama Anggota LPC</label>
-    <select id="selectNama" class="w-full p-2 border rounded mb-6"></select>
+<script src="anggota.js"></script>
+<script>
+  const dropdown = document.getElementById("search");
+  const namaEl = document.querySelector(".text-lg.font-semibold");
+  const statusEl = document.querySelector(".text-sm.text-yellow-200");
+  const totalJamEl = document.querySelectorAll(".text-lg.font-bold")[0];
+  const rataRataEl = document.querySelectorAll(".text-lg.font-bold")[1];
+  const aktivitasContainer = document.querySelector("section:last-of-type");
 
-    <div id="detailAnggota" class="space-y-4 hidden">
-      <h2 class="text-xl font-bold" id="namaHeader"></h2>
-      <p id="statusDuty" class="text-sm text-gray-600"></p>
+  // Ubah input jadi dropdown
+  dropdown.replaceWith(() => {
+    const select = document.createElement("select");
+    select.id = "search";
+    select.className = "w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-green-400";
+    
+    const defaultOpt = document.createElement("option");
+    defaultOpt.text = "Pilih nama anggota...";
+    defaultOpt.disabled = true;
+    defaultOpt.selected = true;
+    select.appendChild(defaultOpt);
 
-      <div id="aktivitasTerakhir"></div>
-    </div>
-  </main>
-
-  <script>
-    const select = document.getElementById("selectNama");
-    const detail = document.getElementById("detailAnggota");
-    const namaHeader = document.getElementById("namaHeader");
-    const statusDuty = document.getElementById("statusDuty");
-    const aktivitasContainer = document.getElementById("aktivitasTerakhir");
-
-    // Isi dropdown
     dataAnggota.forEach(a => {
       const opt = document.createElement("option");
       opt.value = a.nama;
@@ -34,28 +26,37 @@
       select.appendChild(opt);
     });
 
-    // Saat nama dipilih
-    select.addEventListener("change", () => {
-      const selected = dataAnggota.find(a => a.nama === select.value);
-      if (selected) {
-        detail.classList.remove("hidden");
-        namaHeader.textContent = selected.nama;
-        statusDuty.textContent = `${selected.status} • ${selected.duty}`;
-        
-        // Tampilkan aktivitas
-        aktivitasContainer.innerHTML = "";
-        selected.aktivitas.forEach(act => {
-          const div = document.createElement("div");
-          div.className = "bg-white p-4 rounded shadow";
-          div.innerHTML = `
-            <p class="font-medium">${act.tanggal}</p>
-            <p class="text-sm">Total Jam: ${act.total}</p>
-            <p class="text-xs text-gray-500">${act.waktu}</p>
-          `;
-          aktivitasContainer.appendChild(div);
-        });
-      }
-    });
-  </script>
-</body>
-</html>
+    return select;
+  }());
+
+  // Hapus tombol "Cari"
+  document.querySelector("button").remove();
+
+  // Event listener: Saat dipilih
+  document.getElementById("search").addEventListener("change", (e) => {
+    const anggota = dataAnggota.find(a => a.nama === e.target.value);
+    if (!anggota) return;
+
+    namaEl.textContent = anggota.nama;
+    statusEl.innerHTML = `${anggota.status} • <span class="text-yellow-400 font-medium">${anggota.duty}</span>`;
+    totalJamEl.textContent = anggota.totalJam;
+    rataRataEl.textContent = anggota.rataRataJam;
+
+    // Render aktivitas
+    const section = aktivitasContainer;
+    section.innerHTML = `<h3 class="text-lg font-semibold mb-3">Aktivitas Terakhir</h3>`;
+    if (anggota.aktivitas.length === 0) {
+      section.innerHTML += `<p class="text-gray-500 text-sm">Tidak ada aktivitas tercatat.</p>`;
+    } else {
+      anggota.aktivitas.forEach(log => {
+        section.innerHTML += `
+          <div class="bg-white p-4 rounded-xl shadow mb-3">
+            <p class="font-medium text-gray-800">${log.tanggal}</p>
+            <p class="text-sm">Total Jam: <strong>${log.total}</strong></p>
+            <p class="text-xs text-gray-500">${log.waktu}</p>
+          </div>
+        `;
+      });
+    }
+  });
+</script>
