@@ -6,94 +6,46 @@
   <title>Dashboard - Logistik Pulau Cayo</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-<header class="bg-green-700 text-white px-6 py-4 flex justify-between items-center">
-  <div class="flex items-center gap-3">
-    <img src="images/lpc.png" alt="Logo LPC" class="h-12 w-12 rounded-full">
-    <h1 class="text-xl font-bold">Logistik Pulau Cayo</h1>
-  </div>
-</header>
-  <title>Login Sistem</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <!-- Header -->
+  <header class="bg-green-700 text-white px-6 py-4 flex justify-between items-center shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="images/lpc.png" alt="Logo LPC" class="h-12 w-12 rounded-full">
+      <h1 class="text-xl font-bold">Logistik Pulau Cayo</h1>
+    </div>
+  </header>
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f5f7;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  <!-- Login Box -->
+  <main class="flex-grow flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+      <h2 class="text-xl font-semibold text-center mb-6">Login Sistem</h2>
+      <form id="loginForm" class="space-y-4">
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+        <button
+          type="submit"
+          class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-200"
+        >
+          On Duty
+        </button>
+        <p id="error" class="text-red-600 text-sm text-center mt-2"></p>
+      </form>
+    </div>
+  </main>
 
-    .login-container {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      width: 300px;
-      text-align: center;
-    }
-
-    .login-container h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 0.6rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-
-    .form-button {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 1rem;
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .form-button:hover {
-      background-color: #2563eb;
-    }
-  </style>
-</head>
-<body>
-
- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Sistem</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="login-container">
-    <h2>Login Sistem</h2>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" class="form-input" required>
-      <input type="password" id="password" placeholder="Password" class="form-input" required>
-      <button type="submit" class="form-button">Login</button>
-    </form>
-    <p id="error" style="color: red; margin-top: 10px;"></p>
-  </div>
   <script src="script.js"></script>
 </body>
 </html>
-
