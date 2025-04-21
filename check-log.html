@@ -16,9 +16,9 @@
         <i class="fas fa-clipboard-list"></i>
         <span>LPC Check Log</span>
       </h1>
-      <a href="dashboard.html" class="bg-primary-600 hover:bg-primary-800 px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2">
+      <a href="index.html" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm flex items-center gap-2 transition">
         <i class="fas fa-arrow-left"></i>
-        <span>Kembali ke Dashboard</span>
+        <span>Kembali</span>
       </a>
     </div>
   </header>
@@ -63,19 +63,19 @@
     
     <!-- Action Buttons -->
     <div id="actionButtons" class="flex flex-wrap gap-3 justify-center mb-6 hidden">
-      <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="onDutyBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
         <i class="fas fa-play-circle"></i>
         <span>On Duty</span>
       </button>
-      <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="offDutyBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
         <i class="fas fa-stop-circle"></i>
         <span>Off Duty</span>
       </button>
-      <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="cutiBtn" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 transition">
         <i class="fas fa-umbrella-beach"></i>
         <span>Cuti</span>
       </button>
-      <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="resignBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
         <i class="fas fa-sign-out-alt"></i>
         <span>Resign</span>
       </button>
@@ -95,7 +95,8 @@
   </main>
 
 <script>
-  const dataAnggota = [
+  // Data storage
+  let dataAnggota = [
     {
       nama: "Nansu S Harmony",
       status: "Training",
@@ -103,8 +104,20 @@
       totalJam: "1h 50m",
       rataRataJam: "0h 55m",
       aktivitas: [
-        { tanggal: "30/03/2025", total: "1h 37m", waktu: "30/03/25 17:22 - 30/03/25 19:00" },
-        { tanggal: "28/03/2025", total: "0h 13m", waktu: "29/03/25 00:00 - 29/03/25 00:13" }
+        { 
+          tanggal: "30/03/2025", 
+          total: "1h 37m", 
+          waktu: "30/03/25 17:22 - 30/03/25 19:00",
+          type: "work",
+          timestamp: new Date("2025-03-30T17:22:00").getTime()
+        },
+        { 
+          tanggal: "28/03/2025", 
+          total: "0h 13m", 
+          waktu: "29/03/25 00:00 - 29/03/25 00:13",
+          type: "work",
+          timestamp: new Date("2025-03-29T00:00:00").getTime()
+        }
       ]
     },
     {
@@ -134,57 +147,135 @@
   const aktivitasLog = document.getElementById("aktivitasLog");
   const actionButtons = document.getElementById("actionButtons");
   const refreshBtn = document.getElementById("refreshBtn");
+  const onDutyBtn = document.getElementById("onDutyBtn");
+  const offDutyBtn = document.getElementById("offDutyBtn");
+  const cutiBtn = document.getElementById("cutiBtn");
+  const resignBtn = document.getElementById("resignBtn");
 
   const profileCard = document.getElementById("profileCard");
   const stats = document.getElementById("stats");
   const aktivitasSection = document.getElementById("aktivitasSection");
 
+  // Current selected member and last duty change
+  let currentMember = null;
+  let lastDutyChange = null;
+
+  // Initialize the page
+  function init() {
+    populateDropdown();
+    setupEventListeners();
+  }
+
   // Populate dropdown
-  dataAnggota.forEach(a => {
-    const opt = document.createElement("option");
-    opt.value = a.nama;
-    opt.textContent = a.nama;
-    select.appendChild(opt);
-  });
+  function populateDropdown() {
+    dataAnggota.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a.nama;
+      opt.textContent = a.nama;
+      select.appendChild(opt);
+    });
+  }
+
+  // Setup event listeners
+  function setupEventListeners() {
+    select.addEventListener("change", handleMemberSelection);
+    refreshBtn.addEventListener("click", refreshActivityLog);
+    onDutyBtn.addEventListener("click", () => updateDutyStatus("On Duty"));
+    offDutyBtn.addEventListener("click", () => updateDutyStatus("Off Duty"));
+    cutiBtn.addEventListener("click", () => updateDutyStatus("Cuti"));
+    resignBtn.addEventListener("click", () => updateDutyStatus("Resign"));
+  }
 
   // Handle member selection
-  select.addEventListener("change", function() {
+  function handleMemberSelection() {
     const selectedName = this.value;
     if (!selectedName) {
       hideAllSections();
       return;
     }
 
-    const anggota = dataAnggota.find(a => a.nama === selectedName);
-    if (!anggota) return;
+    currentMember = dataAnggota.find(a => a.nama === selectedName);
+    if (!currentMember) return;
 
-    updateProfile(anggota);
-    updateStats(anggota);
-    updateActivityLog(anggota);
+    updateProfile(currentMember);
+    updateStats(currentMember);
+    updateActivityLog(currentMember);
     
     // Show all sections
     profileCard.classList.remove("hidden");
     stats.classList.remove("hidden");
     actionButtons.classList.remove("hidden");
     aktivitasSection.classList.remove("hidden");
-  });
+  }
 
-  // Refresh button
-  refreshBtn.addEventListener("click", function() {
-    const selectedName = select.value;
-    if (!selectedName) return;
-    
-    const anggota = dataAnggota.find(a => a.nama === selectedName);
-    if (anggota) {
-      updateActivityLog(anggota);
+  // Update duty status and log activity
+  function updateDutyStatus(newStatus) {
+    if (!currentMember) return;
+
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const dateString = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
+
+    // If there was a previous duty change, calculate duration
+    if (lastDutyChange && currentMember.duty === "On Duty" && newStatus === "Off Duty") {
+      const durationMs = now - lastDutyChange.time;
+      const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+      const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+      
+      const durationString = `${durationHours}h ${durationMinutes}m`;
+      const activityString = `${lastDutyChange.dateString} ${lastDutyChange.timeString} - ${dateString} ${timeString}`;
+
+      // Add to activity log
+      currentMember.aktivitas.unshift({
+        tanggal: lastDutyChange.dateString,
+        total: durationString,
+        waktu: activityString,
+        type: "work",
+        timestamp: lastDutyChange.time
+      });
+
+      // Update total hours (simplified for demo)
+      if (currentMember.nama === "Nansu S Harmony") {
+        currentMember.totalJam = "3h 27m";
+        currentMember.rataRataJam = "1h 43m";
+      } else if (currentMember.nama === "Dewi Rahayu") {
+        currentMember.totalJam = "6h 30m";
+        currentMember.rataRataJam = "3h 15m";
+      }
     }
-  });
+
+    // Update member status
+    currentMember.duty = newStatus;
+    lastDutyChange = {
+      status: newStatus,
+      time: now,
+      timeString: timeString,
+      dateString: dateString
+    };
+
+    // Update UI
+    updateProfile(currentMember);
+    updateStats(currentMember);
+    updateActivityLog(currentMember);
+
+    // In a real app, you would save to database/spreadsheet here
+    console.log(`Updated ${currentMember.nama} to ${newStatus} at ${now}`);
+  }
+
+  // Refresh activity log
+  function refreshActivityLog() {
+    if (currentMember) {
+      updateActivityLog(currentMember);
+    }
+  }
 
   function hideAllSections() {
     profileCard.classList.add("hidden");
     stats.classList.add("hidden");
     actionButtons.classList.add("hidden");
     aktivitasSection.classList.add("hidden");
+    currentMember = null;
+    lastDutyChange = null;
   }
 
   function updateProfile(anggota) {
@@ -213,9 +304,15 @@
         </div>
       `;
     } else {
-      anggota.aktivitas.forEach(act => {
+      // Sort activities by timestamp (newest first)
+      const sortedActivities = [...anggota.aktivitas].sort((a, b) => b.timestamp - a.timestamp);
+      
+      sortedActivities.forEach(act => {
+        const bgColor = act.type === "work" ? "bg-green-50" : "bg-blue-50";
+        const borderColor = act.type === "work" ? "border-green-200" : "border-blue-200";
+        
         aktivitasLog.innerHTML += `
-          <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+          <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition border-l-4 ${borderColor}">
             <div class="flex justify-between items-start">
               <div>
                 <p class="font-medium text-gray-800">${act.tanggal}</p>
@@ -240,6 +337,9 @@
       default: return 'blue';
     }
   }
+
+  // Initialize the application
+  document.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>
