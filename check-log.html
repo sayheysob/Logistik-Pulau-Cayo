@@ -5,67 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LPC Check Log</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
   <!-- Header --> 
-  <header class="bg-green-700 text-white px-6 py-4 flex justify-between items-center shadow">
-    <h1 class="text-xl font-bold">Daftar Anggota</h1>
-    <a href="index.html" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-sm">Kembali ke Dashboard</a>
+  <header class="bg-green-700 text-white px-6 py-4 shadow">
+    <div class="max-w-3xl mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold flex items-center gap-2">
+        <i class="fas fa-clipboard-list"></i>
+        <span>LPC Check Log</span>
+      </h1>
+      <a href="index.html" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm flex items-center gap-2 transition">
+        <i class="fas fa-arrow-left"></i>
+        <span>Kembali</span>
+      </a>
+    </div>
   </header>
 
   <!-- Main Content -->
   <main class="flex-grow max-w-3xl mx-auto p-6 w-full">
-    <h2 class="text-2xl font-bold text-center mb-6">LPC Check Log</h2>
-
     <!-- Pilih Anggota -->
-    <div class="mb-6">
-      <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Nama Anggota LPC</label>
-      <select id="search" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-green-400">
-        <option selected disabled>Pilih nama anggota...</option>
-      </select>
+    <div class="mb-6 bg-white p-4 rounded-xl shadow">
+      <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Pilih Anggota</label>
+      <div class="relative">
+        <select id="search" class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none">
+          <option value="" selected disabled>Pilih nama anggota...</option>
+        </select>
+        <i class="fas fa-user absolute left-3 top-3 text-gray-400"></i>
+      </div>
     </div>
 
     <!-- Profile Card -->
-    <section id="profileCard" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-xl p-4 mb-6 shadow hidden">
+    <section id="profileCard" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl p-4 mb-6 shadow-lg hidden">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 bg-white text-blue-700 flex items-center justify-center rounded-full">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
+        <div class="w-14 h-14 bg-white text-blue-700 flex items-center justify-center rounded-full shadow">
+          <i class="fas fa-user text-xl"></i>
         </div>
         <div>
           <p id="nama" class="text-lg font-semibold"></p>
-          <p id="status" class="text-sm text-yellow-200"></p>
+          <p id="status" class="text-sm text-blue-100"></p>
         </div>
       </div>
     </section>
 
     <!-- Stats -->
     <div class="grid grid-cols-2 gap-4 mb-6 hidden" id="stats">
-      <div class="bg-gray-100 p-4 rounded-xl text-center shadow-sm">
-        <p class="text-sm text-gray-600">Total Jam</p>
-        <p id="totalJam" class="text-lg font-bold">-</p>
+      <div class="bg-white p-4 rounded-xl text-center shadow border border-gray-100">
+        <p class="text-sm text-gray-600 font-medium">Total Jam</p>
+        <p id="totalJam" class="text-xl font-bold text-blue-600">-</p>
       </div>
-      <div class="bg-gray-100 p-4 rounded-xl text-center shadow-sm">
-        <p class="text-sm text-gray-600">Rata-Rata Jam Harian</p>
-        <p id="rataJam" class="text-lg font-bold">-</p>
+      <div class="bg-white p-4 rounded-xl text-center shadow border border-gray-100">
+        <p class="text-sm text-gray-600 font-medium">Rata-Rata Harian</p>
+        <p id="rataJam" class="text-xl font-bold text-blue-600">-</p>
       </div>
     </div>
     
     <!-- Action Buttons -->
-    <div class="flex flex-wrap gap-2 justify-center mb-6">
-      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">On Duty</button>
-      <button class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Off Duty</button>
-      <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded">Cuti</button>
-      <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Resign</button>
+    <div id="actionButtons" class="flex flex-wrap gap-3 justify-center mb-6 hidden">
+      <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+        <i class="fas fa-play-circle"></i>
+        <span>On Duty</span>
+      </button>
+      <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+        <i class="fas fa-stop-circle"></i>
+        <span>Off Duty</span>
+      </button>
+      <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 transition">
+        <i class="fas fa-umbrella-beach"></i>
+        <span>Cuti</span>
+      </button>
+      <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Resign</span>
+      </button>
     </div>
 
     <!-- Activity Log -->
     <section id="aktivitasSection" class="hidden">
-      <h3 class="text-lg font-semibold mb-3">Aktivitas Terakhir</h3>
-      <div id="aktivitasLog"></div>
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-lg font-semibold">Aktivitas Terakhir</h3>
+        <button id="refreshBtn" class="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1">
+          <i class="fas fa-sync-alt"></i>
+          <span>Refresh</span>
+        </button>
+      </div>
+      <div id="aktivitasLog" class="space-y-3"></div>
     </section>
   </main>
 
@@ -100,12 +125,15 @@
     }
   ];
 
+  // DOM Elements
   const select = document.getElementById("search");
   const namaEl = document.getElementById("nama");
   const statusEl = document.getElementById("status");
   const totalJamEl = document.getElementById("totalJam");
   const rataJamEl = document.getElementById("rataJam");
   const aktivitasLog = document.getElementById("aktivitasLog");
+  const actionButtons = document.getElementById("actionButtons");
+  const refreshBtn = document.getElementById("refreshBtn");
 
   const profileCard = document.getElementById("profileCard");
   const stats = document.getElementById("stats");
@@ -119,35 +147,99 @@
     select.appendChild(opt);
   });
 
+  // Handle member selection
   select.addEventListener("change", function() {
-    const anggota = dataAnggota.find(a => a.nama === this.value);
+    const selectedName = this.value;
+    if (!selectedName) {
+      hideAllSections();
+      return;
+    }
+
+    const anggota = dataAnggota.find(a => a.nama === selectedName);
     if (!anggota) return;
 
-    namaEl.textContent = anggota.nama;
-    statusEl.innerHTML = `${anggota.status} • <span class="text-yellow-400 font-medium">${anggota.duty}</span>`;
-    totalJamEl.textContent = anggota.totalJam;
-    rataJamEl.textContent = anggota.rataRataJam;
-
+    updateProfile(anggota);
+    updateStats(anggota);
+    updateActivityLog(anggota);
+    
+    // Show all sections
     profileCard.classList.remove("hidden");
     stats.classList.remove("hidden");
+    actionButtons.classList.remove("hidden");
     aktivitasSection.classList.remove("hidden");
+  });
 
+  // Refresh button
+  refreshBtn.addEventListener("click", function() {
+    const selectedName = select.value;
+    if (!selectedName) return;
+    
+    const anggota = dataAnggota.find(a => a.nama === selectedName);
+    if (anggota) {
+      updateActivityLog(anggota);
+    }
+  });
+
+  function hideAllSections() {
+    profileCard.classList.add("hidden");
+    stats.classList.add("hidden");
+    actionButtons.classList.add("hidden");
+    aktivitasSection.classList.add("hidden");
+  }
+
+  function updateProfile(anggota) {
+    namaEl.textContent = anggota.nama;
+    statusEl.innerHTML = `
+      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${anggota.status}</span>
+      <span class="bg-${getDutyColor(anggota.duty)}-100 text-${getDutyColor(anggota.duty)}-800 text-xs px-2 py-1 rounded-full ml-2">
+        ${anggota.duty}
+      </span>
+    `;
+  }
+
+  function updateStats(anggota) {
+    totalJamEl.textContent = anggota.totalJam;
+    rataJamEl.textContent = anggota.rataRataJam;
+  }
+
+  function updateActivityLog(anggota) {
     aktivitasLog.innerHTML = "";
 
     if (anggota.aktivitas.length === 0) {
-      aktivitasLog.innerHTML = `<p class="text-sm text-gray-500">Tidak ada aktivitas tercatat.</p>`;
+      aktivitasLog.innerHTML = `
+        <div class="bg-white p-4 rounded-xl shadow text-center text-gray-500">
+          <i class="fas fa-info-circle text-gray-400 mb-2"></i>
+          <p>Tidak ada aktivitas tercatat</p>
+        </div>
+      `;
     } else {
       anggota.aktivitas.forEach(act => {
         aktivitasLog.innerHTML += `
-          <div class="bg-white p-4 rounded-xl shadow mb-3">
-            <p class="font-medium text-gray-800">${act.tanggal}</p>
-            <p class="text-sm">Total Jam: <strong>${act.total}</strong></p>
-            <p class="text-xs text-gray-500">${act.waktu}</p>
+          <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="font-medium text-gray-800">${act.tanggal}</p>
+                <p class="text-sm text-gray-600">${act.waktu}</p>
+              </div>
+              <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                ${act.total}
+              </span>
+            </div>
           </div>
         `;
       });
     }
-  });
+  }
+
+  function getDutyColor(duty) {
+    switch(duty) {
+      case 'On Duty': return 'green';
+      case 'Off Duty': return 'red';
+      case 'Cuti': return 'yellow';
+      case 'Resign': return 'gray';
+      default: return 'blue';
+    }
+  }
 </script>
 
 </body>
