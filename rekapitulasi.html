@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laporan - Trans Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="bg-blue-700 text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Laporan</h1>
+    <a href="index.html" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">Kembali ke Dashboard</a>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-6 py-10">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold">Rekap Laporan Tugas</h2>
+      <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export PDF</button>
+    </div>
+
+    <!-- Filter -->
+    <div class="mb-4 flex gap-4">
+      <select class="border px-3 py-2 rounded w-1/3">
+        <option>Semua Anggota</option>
+        <option>Nansu S Harmony</option>
+        <option>Dewi Rahayu</option>
+      </select>
+
+      <input type="month" class="border px-3 py-2 rounded w-1/3">
+    </div>
+
+    <!-- Tabel Laporan -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white shadow rounded-xl">
+        <thead class="bg-blue-600 text-white">
+          <tr>
+            <th class="py-3 px-4 text-left">Nama</th>
+            <th class="py-3 px-4 text-left">Tanggal</th>
+            <th class="py-3 px-4 text-left">Tugas</th>
+            <th class="py-3 px-4 text-left">Jam Masuk</th>
+            <th class="py-3 px-4 text-left">Jam Keluar</th>
+            <th class="py-3 px-4 text-left">Total Jam</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4">Nansu S Harmony</td>
+            <td class="py-3 px-4">2025-04-20</td>
+            <td class="py-3 px-4">Pengiriman Barang</td>
+            <td class="py-3 px-4">08:00</td>
+            <td class="py-3 px-4">16:00</td>
+            <td class="py-3 px-4">8 Jam</td>
+          </tr>
+
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4">Dewi Rahayu</td>
+            <td class="py-3 px-4">2025-04-20</td>
+            <td class="py-3 px-4">Administrasi</td>
+            <td class="py-3 px-4">09:00</td>
+            <td class="py-3 px-4">17:00</td>
+            <td class="py-3 px-4">8 Jam</td>
+          </tr>
+
+          <tr class="hover:bg-gray-50">
+            <td class="py-3 px-4">Budi Santoso</td>
+            <td class="py-3 px-4">2025-04-20</td>
+            <td class="py-3 px-4">Maintenance</td>
+            <td class="py-3 px-4">07:00</td>
+            <td class="py-3 px-4">15:00</td>
+            <td class="py-3 px-4">8 Jam</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="text-center py-4 text-gray-500 text-sm">
+    &copy; 2025 Trans Management System
+  </footer>
+
+</body>
+</html>
