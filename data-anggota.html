@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<script src="https://cdn.jsdelivr.net/npm/tabletop@1.6.0/tabletop.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tabletop@1.6.0/tabletop.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data Anggota - Logistik Pulau Cayo</title>
@@ -76,59 +76,7 @@
           </tr>
         </thead>
         <tbody id="anggotaTable" class="divide-y divide-gray-200">
-          <tr class="hover:bg-gray-50 transition duration-150">
-            <td class="py-4 px-6">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
-                  <i class="fas fa-user"></i>
-                </div>
-                <span class="nama">Nansu S Harmony</span>
-              </div>
-            </td>
-            <td class="py-4 px-6 posisi">Driver</td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
-            </td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
-            </td>
-          </tr>
-
-          <tr class="hover:bg-gray-50 transition duration-150">
-            <td class="py-4 px-6">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
-                  <i class="fas fa-user"></i>
-                </div>
-                <span class="nama">Dewi Rahayu</span>
-              </div>
-            </td>
-            <td class="py-4 px-6 posisi">Petugas</td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 status">Aktif</span>
-            </td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 duty">On Duty</span>
-            </td>
-          </tr>
-
-          <tr class="hover:bg-gray-50 transition duration-150">
-            <td class="py-4 px-6">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
-                  <i class="fas fa-user"></i>
-                </div>
-                <span class="nama">Budi Santoso</span>
-              </div>
-            </td>
-            <td class="py-4 px-6 posisi">Staff</td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 status">Nonaktif</span>
-            </td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 duty">Resign</span>
-            </td>
-          </tr>
+          <!-- Data akan di-load lewat JavaScript -->
         </tbody>
       </table>
     </div>
@@ -136,7 +84,7 @@
     <!-- Pagination -->
     <div class="mt-6 flex justify-between items-center">
       <div class="text-sm text-gray-500">
-        Menampilkan <span id="showingCount">3</span> dari 3 anggota
+        Menampilkan <span id="showingCount">0</span> anggota
       </div>
       <div class="flex gap-2">
         <button class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100">
@@ -158,31 +106,65 @@
     </div>
   </footer>
 
+  <!-- Ambil Data dari Google Sheets -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchInput = document.getElementById('searchInput');
-      const anggotaTable = document.getElementById('anggotaTable');
-      const showingCount = document.getElementById('showingCount');
-      const rows = anggotaTable.getElementsByTagName('tr');
-      
+    window.addEventListener('DOMContentLoaded', () => {
+      Tabletop.init({
+        key: 'https://docs.google.com/spreadsheets/d/105dLzjjhpm96MAjq6cXNZxHv5claFrn8svgnLblk9Zs/pubhtml',
+        simpleSheet: true,
+        callback: function(data) {
+          const tbody = document.getElementById('anggotaTable');
+          tbody.innerHTML = '';
+          let count = 0;
+
+          data.forEach(row => {
+            if (row.Nama && row.Jabatan) {
+              const tr = document.createElement('tr');
+              tr.className = 'hover:bg-gray-50 transition duration-150';
+              tr.innerHTML = `
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
+                      <i class="fas fa-user"></i>
+                    </div>
+                    <span class="nama">${row.Nama}</span>
+                  </div>
+                </td>
+                <td class="py-4 px-6 posisi">${row.Jabatan}</td>
+                <td class="py-4 px-6">
+                  <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
+                </td>
+              `;
+              tbody.appendChild(tr);
+              count++;
+            }
+          });
+
+          document.getElementById('showingCount').textContent = count;
+        }
+      });
+
       // Fungsi pencarian
-      searchInput.addEventListener('input', function() {
+      document.getElementById('searchInput').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#anggotaTable tr');
         let visibleCount = 0;
-        
-        for (let i = 0; i < rows.length; i++) {
-          const nama = rows[i].querySelector('.nama').textContent.toLowerCase();
-          const posisi = rows[i].querySelector('.posisi').textContent.toLowerCase();
-          
+
+        rows.forEach(row => {
+          const nama = row.querySelector('.nama').textContent.toLowerCase();
+          const posisi = row.querySelector('.posisi').textContent.toLowerCase();
           if (nama.includes(searchTerm) || posisi.includes(searchTerm)) {
-            rows[i].style.display = '';
+            row.style.display = '';
             visibleCount++;
           } else {
-            rows[i].style.display = 'none';
+            row.style.display = 'none';
           }
-        }
-        
-        showingCount.textContent = visibleCount;
+        });
+
+        document.getElementById('showingCount').textContent = visibleCount;
       });
     });
   </script>
