@@ -108,65 +108,66 @@
 
   <!-- Ambil Data dari Google Sheets -->
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      Tabletop.init({
-        key: 'https://docs.google.com/spreadsheets/d/105dLzjjhpm96MAjq6cXNZxHv5claFrn8svgnLblk9Zs/pubhtml',
-        simpleSheet: true,
-        callback: function(data) {
-          const tbody = document.getElementById('anggotaTable');
-          tbody.innerHTML = '';
-          let count = 0;
+  window.addEventListener('DOMContentLoaded', () => {
+    Tabletop.init({
+      key: '105dLzjjhpm96MAjq6cXNZxHv5claFrn8svgnLblk9Zs',
+      simpleSheet: false,
+      callback: function(data) {
+        const anggota = data["Daftar Anggota"].elements;
+        const tbody = document.getElementById('anggotaTable');
+        tbody.innerHTML = '';
+        let count = 0;
 
-          data.forEach(row => {
-            if (row.Nama && row.Jabatan) {
-              const tr = document.createElement('tr');
-              tr.className = 'hover:bg-gray-50 transition duration-150';
-              tr.innerHTML = `
-                <td class="py-4 px-6">
-                  <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
-                      <i class="fas fa-user"></i>
-                    </div>
-                    <span class="nama">${row.Nama}</span>
+        anggota.forEach(row => {
+          if (row.Nama && row.Jabatan) {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-50 transition duration-150';
+            tr.innerHTML = `
+              <td class="py-4 px-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
+                    <i class="fas fa-user"></i>
                   </div>
-                </td>
-                <td class="py-4 px-6 posisi">${row.Jabatan}</td>
-                <td class="py-4 px-6">
-                  <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
-                </td>
-                <td class="py-4 px-6">
-                  <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
-                </td>
-              `;
-              tbody.appendChild(tr);
-              count++;
-            }
-          });
-
-          document.getElementById('showingCount').textContent = count;
-        }
-      });
-
-      // Fungsi pencarian
-      document.getElementById('searchInput').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#anggotaTable tr');
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-          const nama = row.querySelector('.nama').textContent.toLowerCase();
-          const posisi = row.querySelector('.posisi').textContent.toLowerCase();
-          if (nama.includes(searchTerm) || posisi.includes(searchTerm)) {
-            row.style.display = '';
-            visibleCount++;
-          } else {
-            row.style.display = 'none';
+                  <span class="nama">${row.Nama}</span>
+                </div>
+              </td>
+              <td class="py-4 px-6 posisi">${row.Jabatan}</td>
+              <td class="py-4 px-6">
+                <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
+              </td>
+              <td class="py-4 px-6">
+                <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
+              </td>
+            `;
+            tbody.appendChild(tr);
+            count++;
           }
         });
 
-        document.getElementById('showingCount').textContent = visibleCount;
-      });
+        document.getElementById('showingCount').textContent = count;
+      }
     });
-  </script>
+
+    // Fungsi pencarian
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#anggotaTable tr');
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const nama = row.querySelector('.nama').textContent.toLowerCase();
+        const posisi = row.querySelector('.posisi').textContent.toLowerCase();
+        if (nama.includes(searchTerm) || posisi.includes(searchTerm)) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      document.getElementById('showingCount').textContent = visibleCount;
+    });
+  });
+</script>
 </body>
 </html>
