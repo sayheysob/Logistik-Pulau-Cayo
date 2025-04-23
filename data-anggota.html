@@ -113,65 +113,61 @@
 
   <!-- Ambil Data dari Google Sheets -->
   <script>
-    async function loadCSVData() {
-      const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSAWE5eUEfo6EwvVIKvM_AoToiDgXuA1aYcX3_TbImeY01kvRMEoPifcQzn-18-TocPiUmezm36T0A3/pub?gid=0&single=true&output=csv");
-      const text = await response.text();
-      const rows = text.split("\n").slice(1); // skip header
+    async function loadSheetData() {
+      const apiUrl = 'https://docs.google.com/spreadsheets/d/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/edit?usp=sharing'; // Ganti dengan URL API opensheet.elk.sh
+      const response = await fetch(apiUrl);
+      const data = await response.json();
       const tbody = document.getElementById("anggotaTable");
       tbody.innerHTML = "";
       let count = 0;
-  
-      rows.forEach(row => {
-        const cols = row.split(",");
-        if (cols.length >= 2) {
-          const [nama, jabatan] = cols;
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td class="py-4 px-6">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
-                  <i class="fas fa-user"></i>
-                </div>
-                <span class="nama">${nama}</span>
+
+      data.forEach(member => {
+        const { nomor, nama, jabatan } = member; // Sesuaikan dengan nama kolom di Google Sheets Anda
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="py-4 px-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
+                <i class="fas fa-user"></i>
               </div>
-            </td>
-            <td class="py-4 px-6 posisi">${jabatan}</td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
-            </td>
-            <td class="py-4 px-6">
-              <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
-            </td>
-          `;
-          tbody.appendChild(tr);
-          count++;
-        }
+              <span class="nama">${nama}</span>
+            </div>
+          </td>
+          <td class="py-4 px-6 posisi">${jabatan}</td>
+          <td class="py-4 px-6">
+            <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
+          </td>
+          <td class="py-4 px-6">
+            <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+        count++;
       });
-  
+
       document.getElementById("showingCount").textContent = count;
     }
-  
-    window.addEventListener("DOMContentLoaded", loadCSVData);
 
-      // Fungsi pencarian
-      document.getElementById('searchInput').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#anggotaTable tr');
-        let visibleCount = 0;
+    window.addEventListener("DOMContentLoaded", loadSheetData);
 
-        rows.forEach(row => {
-          const nama = row.querySelector('.nama').textContent.toLowerCase();
-          const posisi = row.querySelector('.posisi').textContent.toLowerCase();
-          if (nama.includes(searchTerm) || posisi.includes(searchTerm)) {
-            row.style.display = '';
-            visibleCount++;
-          } else {
-            row.style.display = 'none';
-          }
-        });
+    // Fungsi pencarian
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#anggotaTable tr');
+      let visibleCount = 0;
 
-        document.getElementById('showingCount').textContent = visibleCount;
+      rows.forEach(row => {
+        const nama = row.querySelector('.nama').textContent.toLowerCase();
+        const posisi = row.querySelector('.posisi').textContent.toLowerCase();
+        if (nama.includes(searchTerm) || posisi.includes(searchTerm)) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
       });
+
+      document.getElementById('showingCount').textContent = visibleCount;
     });
   </script>
 </body>
