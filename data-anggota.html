@@ -113,40 +113,41 @@
 
   <!-- Ambil Data dari Google Sheets -->
   <script>
-    async function loadSheetData() {
-      const apiUrl = 'https://docs.google.com/spreadsheets/d/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/edit?usp=sharing'; // Ganti dengan URL API opensheet.elk.sh
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      const tbody = document.getElementById("anggotaTable");
-      tbody.innerHTML = "";
-      let count = 0;
+async function loadSheetData() {
+  const apiUrl = 'https://docs.google.com/spreadsheets/d/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/edit?usp=sharing'; 
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  const tbody = document.getElementById("anggotaTable");
+  tbody.innerHTML = "";
+  let count = 0;
 
-      data.forEach(member => {
-        const { nomor, nama, jabatan } = member; // Sesuaikan dengan nama kolom di Google Sheets Anda
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="py-4 px-6">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
-                <i class="fas fa-user"></i>
-              </div>
-              <span class="nama">${nama}</span>
-            </div>
-          </td>
-          <td class="py-4 px-6 posisi">${jabatan}</td>
-          <td class="py-4 px-6">
-            <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
-          </td>
-          <td class="py-4 px-6">
-            <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
-          </td>
-        `;
-        tbody.appendChild(tr);
-        count++;
-      });
+  data.forEach(member => {
+    const { nama, jabatan } = member; // Sesuaikan dengan nama kolom di Google Sheets Anda
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="py-4 px-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800">
+            <i class="fas fa-user"></i>
+          </div>
+          <span class="nama">${nama}</span>
+        </div>
+      </td>
+      <td class="py-4 px-6 posisi">${jabatan}</td>
+      <td class="py-4 px-6">
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 status">Training</span>
+      </td>
+      <td class="py-4 px-6">
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 duty">Off Duty</span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+    count++;
+  });
 
-      document.getElementById("showingCount").textContent = count;
-    }
+  document.getElementById("showingCount").textContent = count;
+}
+
 
     window.addEventListener("DOMContentLoaded", loadSheetData);
 
