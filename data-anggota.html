@@ -36,15 +36,15 @@
 <body class="bg-gray-50">
 
   <!-- Header -->
-  <header class="bg-primary-700 text-white px-6 py-4 shadow-lg">
+  <header class="bg-primary-700 text-white px-6 py-4 shadow-xl rounded-b-xl">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-6">
         <i class="fas fa-users text-2xl"></i>
-        <h1 class="text-xl font-bold">Data Anggota</h1>
+        <h1 class="text-2xl font-semibold">Data Anggota</h1>
       </div>
-      <a href="dashboard.html" class="bg-primary-600 hover:bg-primary-800 px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2">
+      <a href="dashboard.html" class="bg-primary-600 hover:bg-primary-800 px-5 py-3 rounded-lg transition duration-200 flex items-center gap-3 hover:scale-105">
         <i class="fas fa-arrow-left"></i>
-        <span>Kembali ke Dashboard</span>
+        <span class="text-lg">Kembali ke Dashboard</span>
       </a>
     </div>
   </header>
@@ -53,7 +53,7 @@
   <main class="max-w-6xl mx-auto px-6 py-8">
     <div class="flex justify-between items-center mb-8">
       <div>
-        <h2 class="text-2xl font-semibold text-gray-800">Daftar Anggota</h2>
+        <h2 class="text-3xl font-semibold text-gray-800">Daftar Anggota</h2>
         <p class="text-gray-500 mt-1">Kelola data anggota tim Logistik Pulau Cayo</p>
       </div>
       <div class="relative">
@@ -61,7 +61,7 @@
           type="text" 
           id="searchInput"
           placeholder="Cari nama anggota..." 
-          class="border border-gray-300 px-4 py-2 pl-10 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          class="border border-gray-300 px-4 py-2 pl-10 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-lg transition-all"
         >
         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
       </div>
@@ -83,23 +83,21 @@
       </table>
     </div>
 
-
- <!-- Pagination -->
-<div class="mt-6 flex justify-between items-center">
-  <div class="text-sm text-gray-500">
-    Menampilkan <span id="showingCount">0</span> anggota
-  </div>
-  <div class="flex gap-2">
-    <button id="prevPage" class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100" style="display: none;">
-      <i class="fas fa-chevron-left"></i> Sebelumnya
-    </button>
-    <span id="pageNumber" class="px-4 py-2 border rounded-lg bg-gray-100 text-gray-800">Halaman 1</span>
-    <button id="nextPage" class="px-4 py-2 border rounded-lg bg-primary-600 text-white">
-      &gt;
-    </button>
-  </div>
-</div>
-
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-between items-center">
+      <div class="text-sm text-gray-500">
+        Menampilkan <span id="showingCount">0</span> anggota
+      </div>
+      <div class="flex gap-2">
+        <button id="prevPage" class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 transition-all" style="display: none;">
+          <i class="fas fa-chevron-left"></i> Sebelumnya
+        </button>
+        <span id="pageNumber" class="px-4 py-2 border rounded-lg bg-gray-100 text-gray-800">Halaman 1</span>
+        <button id="nextPage" class="px-4 py-2 border rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-all">
+          &gt;
+        </button>
+      </div>
+    </div>
   </main>
 
   <footer class="bg-white py-4 border-t">
@@ -113,104 +111,105 @@
   <!-- Ambil Data dari Google Sheets -->
   <script>
     let currentPage = 1;
-const itemsPerPage = 10;
-let fullData = [];
+    const itemsPerPage = 10;
+    let fullData = [];
 
-async function loadSheetData() {
-  const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota'; // URL API untuk spreadsheet Anda
-  const response = await fetch(apiUrl);
-  const data = await response.json();
-  
-  // Menyimpan data penuh untuk pencarian
-  fullData = data.map((member, index) => {
-    return {
-      nomor: member.NO,
-      nama: member.NAMA,
-      jabatan: member.JABATAN
-    };
-  });
+    async function loadSheetData() {
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota'; // URL API untuk spreadsheet Anda
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      
+      // Menyimpan data penuh untuk pencarian
+      fullData = data.map((member, index) => {
+        return {
+          nomor: member.NO,
+          nama: member.NAMA,
+          jabatan: member.JABATAN
+        };
+      });
 
-  renderTable(fullData);
-  handlePagination(fullData);
-}
-
-function renderTable(data) {
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = currentPage * itemsPerPage;
-  const currentItems = data.slice(start, end);
-  
-  const tbody = document.getElementById("anggotaTable");
-  tbody.innerHTML = "";
-  let count = 0;
-
-  currentItems.forEach((member) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="py-4 px-6">${member.nomor}</td>
-      <td class="py-4 px-6">${member.nama}</td>
-      <td class="py-4 px-6">${member.jabatan}</td>
-    `;
-    tbody.appendChild(tr);
-    count++;
-  });
-
-  document.getElementById("showingCount").textContent = count;
-}
-
-function handlePagination(data) {
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  const nextPageButton = document.getElementById("nextPage");
-  const prevPageButton = document.getElementById("prevPage");
-  const pageNumber = document.getElementById("pageNumber");
-
-  // Menampilkan nomor halaman
-  pageNumber.textContent = `Halaman ${currentPage}`;
-
-  // Menyembunyikan tombol previous pada halaman 1
-  if (currentPage <= 1) {
-    prevPageButton.style.display = 'none';
-  } else {
-    prevPageButton.style.display = 'inline-block';
-  }
-
-  // Menyembunyikan tombol next pada halaman terakhir
-  if (currentPage >= totalPages) {
-    nextPageButton.style.display = 'none';
-  } else {
-    nextPageButton.style.display = 'inline-block';
-  }
-
-  // Previous page button
-  prevPageButton.onclick = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTable(data);
-      handlePagination(data);
+      renderTable(fullData);
+      handlePagination(fullData);
     }
-  };
 
-  // Next page button
-  nextPageButton.onclick = () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderTable(data);
-      handlePagination(data);
+    function renderTable(data) {
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = currentPage * itemsPerPage;
+      const currentItems = data.slice(start, end);
+      
+      const tbody = document.getElementById("anggotaTable");
+      tbody.innerHTML = "";
+      let count = 0;
+
+      currentItems.forEach((member) => {
+        const tr = document.createElement("tr");
+        tr.classList.add("hover:bg-gray-50", "transition-all"); // Hover effect for rows
+        tr.innerHTML = `
+          <td class="py-4 px-6">${member.nomor}</td>
+          <td class="py-4 px-6">${member.nama}</td>
+          <td class="py-4 px-6">${member.jabatan}</td>
+        `;
+        tbody.appendChild(tr);
+        count++;
+      });
+
+      document.getElementById("showingCount").textContent = count;
     }
-  };
-}
 
-document.getElementById('searchInput').addEventListener('input', function() {
-  const searchTerm = this.value.toLowerCase();
-  const filteredData = fullData.filter(member => 
-    member.nama.toLowerCase().includes(searchTerm) || 
-    member.jabatan.toLowerCase().includes(searchTerm)
-  );
+    function handlePagination(data) {
+      const totalPages = Math.ceil(data.length / itemsPerPage);
+      const nextPageButton = document.getElementById("nextPage");
+      const prevPageButton = document.getElementById("prevPage");
+      const pageNumber = document.getElementById("pageNumber");
 
-  renderTable(filteredData);
-  handlePagination(filteredData);
-});
+      // Menampilkan nomor halaman
+      pageNumber.textContent = `Halaman ${currentPage}`;
 
-window.addEventListener("DOMContentLoaded", loadSheetData);
+      // Menyembunyikan tombol previous pada halaman 1
+      if (currentPage <= 1) {
+        prevPageButton.style.display = 'none';
+      } else {
+        prevPageButton.style.display = 'inline-block';
+      }
+
+      // Menyembunyikan tombol next pada halaman terakhir
+      if (currentPage >= totalPages) {
+        nextPageButton.style.display = 'none';
+      } else {
+        nextPageButton.style.display = 'inline-block';
+      }
+
+      // Previous page button
+      prevPageButton.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTable(data);
+          handlePagination(data);
+        }
+      };
+
+      // Next page button
+      nextPageButton.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderTable(data);
+          handlePagination(data);
+        }
+      };
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const filteredData = fullData.filter(member => 
+        member.nama.toLowerCase().includes(searchTerm) || 
+        member.jabatan.toLowerCase().includes(searchTerm)
+      );
+
+      renderTable(filteredData);
+      handlePagination(filteredData);
+    });
+
+    window.addEventListener("DOMContentLoaded", loadSheetData);
   </script>
 </body>
 </html>
