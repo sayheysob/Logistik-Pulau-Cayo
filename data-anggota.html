@@ -159,31 +159,41 @@
       const nextPageButton = document.getElementById("nextPage");
       const prevPageButton = document.getElementById("prevPage");
 
-      // Menampilkan nomor halaman
-      nextPageButton.textContent = `Halaman ${currentPage}`;
+  // Menampilkan nomor halaman
+  pageNumber.textContent = `Halaman ${currentPage}`;
 
-      // Enable/Disable pagination buttons
-      prevPageButton.disabled = currentPage <= 1;
-      nextPageButton.disabled = currentPage >= totalPages;
+  // Menyembunyikan tombol previous pada halaman 1
+  if (currentPage <= 1) {
+    prevPageButton.style.display = 'none';
+  } else {
+    prevPageButton.style.display = 'inline-block';
+  }
 
-      // Next page button
-      nextPageButton.onclick = () => {
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderTable(data);
-          handlePagination(data);
-        }
-      };
+  // Menyembunyikan tombol next pada halaman terakhir
+  if (currentPage >= totalPages) {
+    nextPageButton.style.display = 'none';
+  } else {
+    nextPageButton.style.display = 'inline-block';
+  }
 
-      // Previous page button
-      prevPageButton.onclick = () => {
-        if (currentPage > 1) {
-          currentPage--;
-          renderTable(data);
-          handlePagination(data);
-        }
-      };
+  // Previous page button
+  prevPageButton.onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTable(data);
+      handlePagination(data);
     }
+  };
+
+  // Next page button
+  nextPageButton.onclick = () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderTable(data);
+      handlePagination(data);
+    }
+  };
+}
 
     document.getElementById('searchInput').addEventListener('input', function() {
       const searchTerm = this.value.toLowerCase();
