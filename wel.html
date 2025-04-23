@@ -1,0 +1,164 @@
+<script>
+  // Data anggota yang sudah dipilih
+  let currentMember = null;
+
+  // Webhook URL Discord (Ganti dengan URL Webhook Anda)
+  const discordWebhookURL = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL";
+
+  // Google Apps Script Web App URL (Ganti dengan URL Web App Anda)
+  const googleSheetsAPI = 'https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_URL/exec';
+
+  // Fungsi untuk mengirim data ke Discord Webhook
+  function sendToDiscord(member) {
+    const currentDate = new Date();
+    const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+    // Pesan yang akan dikirim ke Webhook Discord
+    const message = {
+      content: `Anggota On Duty: ${member.nama}\nJabatan: ${member.jabatan}\nTanggal: ${dateString}\nWaktu: ${timeString}`
+    };
+
+    // Mengirim pesan ke Discord Webhook
+    fetch(discordWebhookURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Data berhasil dikirim ke Discord:", data);
+    })
+    .catch(error => {
+      console.error("Terjadi kesalahan saat mengirim data ke Discord:", error);
+    });
+  }
+
+  // Fungsi untuk menambahkan data ke Google Spreadsheet (On Duty)
+  function sendToGoogleSheets(member) {
+    const currentDate = new Date();
+    const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+    const requestData = {
+      memberName: member.nama,
+      jabatan: member.jabatan,  // Hanya jabatan yang dikirim
+      date: dateString,
+      time: timeString
+    };
+
+    // Kirim data ke Google Sheets menggunakan Google Apps Script Web App
+    fetch(googleSheetsAPI, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Data berhasil dikirim ke Google Sheets:", data);
+    })
+    .catch(error => {
+      console.error("Terjadi kesalahan saat mengirim data ke Google Sheets:", error);
+    });
+  }
+
+  // Tombol On Duty
+  const onDutyBtn = document.getElementById("onDutyBtn");
+
+  // Event listener untuk tombol On Duty
+  onDutyBtn.addEventListener('click', function() {
+    if (!currentMember) {
+      alert("Pilih anggota terlebih dahulu.");
+      return;
+    }
+
+    // Kirim data ke Webhook Discord dan Google Sheets (On Duty)
+    sendToDiscord(currentMember);
+    sendToGoogleSheets(currentMember);
+
+    // Update UI dengan pesan status
+    alert(`Anggota ${currentMember.nama} telah On Duty pada ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`);
+  });
+
+  // Fungsi untuk mengupdate profil anggota yang dipilih
+  function updateProfile(anggota) {
+    const namaEl = document.getElementById("nama");
+    const statusEl = document.getElementById("status");
+
+    namaEl.textContent = anggota.nama;
+    statusEl.innerHTML = `
+      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${anggota.jabatan}</span>
+    `;
+  }
+
+  // Fungsi untuk menampilkan data anggota yang dipilih
+  function handleMemberSelection() {
+    const selectedName = this.value;
+    if (!selectedName) {
+      hideAllSections();
+      return;
+    }
+
+    currentMember = fullData.find(a => a.nama === selectedName);
+    if (!currentMember) return;
+
+    updateProfile(currentMember);
+    updateStats(currentMember);
+    updateActivityLog(currentMember);
+    
+    // Show all sections
+    profileCard.classList.remove("hidden");
+    stats.classList.remove("hidden");
+    actionButtons.classList.remove("hidden");
+    aktivitasSection.classList.remove("hidden");
+  }
+
+  // Fungsi untuk mengupdate stats (Total Jam, Rata-Rata Jam)
+  function updateStats(anggota) {
+    const totalJamEl = document.getElementById("totalJam");
+    const rataJamEl = document.getElementById("rataJam");
+
+    totalJamEl.textContent = anggota.totalJam;
+    rataJamEl.textContent = anggota.rataRataJam;
+  }
+
+  // Mengambil data anggota dari Google Sheets (misalnya menggunakan OpenSheet API)
+  async function loadSheetData() {
+    const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    fullData = data.map((member) => {
+      return {
+        nama: member.NAMA,
+        jabatan: member.JABATAN || 'Tidak Ada Data',
+        duty: member.DUTY || 'Tidak Ada Data',
+        totalJam: member.TOTAL_JAM || '0h 0m',
+        rataRataJam: member.RATA_RATA_JAM || '0h 0m',
+        aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
+      };
+    });
+
+    populateDropdown(fullData);
+  }
+
+  function populateDropdown(data) {
+    const select = document.getElementById("search");
+    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
+
+    data.forEach(anggota => {
+      const option = document.createElement("option");
+      option.value = anggota.nama;
+      option.textContent = anggota.nama;
+      select.appendChild(option);
+    });
+  }
+
+  // Initialize the page
+  document.addEventListener('DOMContentLoaded', loadSheetData);
+  document.getElementById("search").addEventListener("change", handleMemberSelection);
+</script>
