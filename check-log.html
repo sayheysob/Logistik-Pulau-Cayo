@@ -112,8 +112,7 @@
     fullData = data.map((member) => {
       return {
         nama: member.NAMA,
-        status: member.STATUS || 'Tidak Ada Data',
-        duty: member.DUTY || 'Tidak Ada Data',
+        status: member.JABATAN || 'Tidak Ada Data',
         totalJam: member.TOTAL_JAM || '0h 0m',
         rataRataJam: member.RATA_RATA_JAM || '0h 0m',
         aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
