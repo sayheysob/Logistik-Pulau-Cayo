@@ -166,10 +166,61 @@
   }
 
   // Update aktivitas log (untuk sekarang hanya menunjukkan placeholder)
+   // Update aktivitas log
   function updateActivityLog(anggota) {
     const aktivitasLogEl = document.getElementById("aktivitasLog");
-    aktivitasLogEl.innerHTML = `<p>Aktivitas terakhir untuk ${anggota.nama} (placeholder)</p>`;
+
+    // Reset previous log
+    aktivitasLogEl.innerHTML = "";
+
+    // Example of rendering activity data for the selected member
+    // Here, you could format a more detailed log structure (if activity is stored)
+    if (anggota.aktivitas && anggota.aktivitas.length > 0) {
+      anggota.aktivitas.forEach(activity => {
+        const activityBox = document.createElement("div");
+        activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow", "border", "border-gray-200");
+
+        const activityContent = document.createElement("p");
+        activityContent.classList.add("text-sm", "text-gray-700");
+        activityContent.innerHTML = `
+          <strong>Waktu:</strong> ${activity.waktu}<br>
+          <strong>Deskripsi:</strong> ${activity.deskripsi}
+        `;
+        
+        activityBox.appendChild(activityContent);
+        aktivitasLogEl.appendChild(activityBox);
+      });
+    } else {
+      // No activities to show, display a placeholder message
+      const noActivityMessage = document.createElement("p");
+      noActivityMessage.classList.add("text-gray-500");
+      noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
+      aktivitasLogEl.appendChild(noActivityMessage);
+    }
   }
+
+  // Update your `fullData` mapping to include activity sample data
+  async function loadSheetData() {
+    try {
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      fullData = data.map(member => ({
+        nama: member.NAMA,
+        jabatan: member.JABATAN || 'Tidak Ada Data',
+        duty: member.DUTY || 'Tidak Ada Data',
+        totalJam: member.TOTAL_JAM || '0h 0m',
+        rataRataJam: member.RATA_RATA_JAM || '0h 0m',
+        aktivitas: member.AKTIVITAS || []  // Assuming AKTIVITAS field contains the log data
+      }));
+
+      populateDropdown(fullData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
 
   // Load data anggota dari Google Sheets (gunakan OpenSheet API atau API lainnya)
   async function loadSheetData() {
