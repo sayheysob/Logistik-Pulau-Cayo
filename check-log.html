@@ -29,53 +29,7 @@
     }
   </script>
   <style>
-    /* Smooth transition for all interactive elements */
-    .transition-all {
-      transition: all 0.3s ease-in-out;
-    }
-
-    /* Custom hover effect */
-    .hover-scale:hover {
-      transform: scale(1.05);
-    }
-
-    /* Pulse animation for buttons */
-    .pulse:hover {
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    /* Tooltip styling */
-    .tooltip {
-      position: relative;
-    }
-
-    .tooltip:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(0, 0, 0, 0.7);
-      color: #fff;
-      padding: 5px 10px;
-      border-radius: 4px;
-      white-space: nowrap;
-      font-size: 12px;
-    }
-
-    /* Flexbox styling to push footer to the bottom */
+    /* Flexbox untuk footer tetap di bawah */
     html, body {
       height: 100%;
       margin: 0;
@@ -117,6 +71,7 @@
       </div>
     </div>
 
+    <!-- Profile Card -->
     <section id="profileCard" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl p-4 mb-6 shadow-lg hidden">
       <div class="flex items-center gap-4">
         <div class="w-14 h-14 bg-white text-blue-700 flex items-center justify-center rounded-full shadow-lg">
@@ -129,17 +84,19 @@
       </div>
     </section>
 
+    <!-- Stats -->
     <div id="stats" class="grid grid-cols-2 gap-4 mb-6 hidden">
-      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100 hover:scale-105 transition-all">
+      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100">
         <p class="text-sm text-gray-600 font-medium">Total Jam</p>
         <p id="totalJam" class="text-xl font-bold text-blue-600">-</p>
       </div>
-      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100 hover:scale-105 transition-all">
+      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100">
         <p class="text-sm text-gray-600 font-medium">Rata-Rata Harian</p>
         <p id="rataJam" class="text-xl font-bold text-blue-600">-</p>
       </div>
     </div>
 
+    <!-- Action Buttons -->
     <div id="actionButtons" class="flex flex-wrap gap-3 justify-center mb-6 hidden">
       <button id="onDutyBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
         <i class="fas fa-play-circle"></i>
@@ -159,6 +116,7 @@
       </button>
     </div>
 
+    <!-- Aktivitas -->
     <section id="aktivitasSection" class="hidden">
       <div class="flex justify-between items-center mb-3">
         <h3 class="text-lg font-semibold">Aktivitas Terakhir</h3>
@@ -171,6 +129,7 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="bg-white py-4 border-t">
     <div class="max-w-6xl mx-auto px-6 text-center text-gray-500 text-sm">
       &copy; 2025 Logistik Pulau Cayo - Sistem Manajemen Anggota
@@ -178,7 +137,125 @@
   </footer>
 
 <script>
-// JavaScript untuk interaktivitas sudah tetap seperti yang sebelumnya
+  // Data untuk anggota (ini bisa diambil dari API atau sumber lain)
+  let currentMember = null;
+  let fullData = [];  // Data anggota yang akan dimuat
+
+  // Referensi elemen
+  const profileCard = document.getElementById('profileCard');
+  const stats = document.getElementById('stats');
+  const actionButtons = document.getElementById('actionButtons');
+  const aktivitasSection = document.getElementById('aktivitasSection');
+
+  // Fungsi untuk mengupdate profil anggota yang dipilih
+  function updateProfile(anggota) {
+    const namaEl = document.getElementById("nama");
+    const statusEl = document.getElementById("status");
+
+    namaEl.textContent = anggota.nama;
+    statusEl.innerHTML = `
+      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${anggota.jabatan}</span>
+    `;
+  }
+
+  // Fungsi untuk menangani pemilihan anggota
+  function handleMemberSelection() {
+    const selectedName = this.value;
+    if (!selectedName) {
+      return; // Tidak lanjut jika tidak ada anggota yang dipilih
+    }
+
+    currentMember = fullData.find(a => a.nama === selectedName);
+    if (!currentMember) return;
+
+    // Update profile, stats, and activity log
+    updateProfile(currentMember);
+    updateStats(currentMember);
+    updateActivityLog(currentMember);
+
+    // Menghilangkan class hidden untuk menampilkan elemen
+    profileCard.classList.remove("hidden");
+    stats.classList.remove("hidden");
+    actionButtons.classList.remove("hidden");
+    aktivitasSection.classList.remove("hidden");
+  }
+
+  // Fungsi untuk mengupdate stats (Total Jam, Rata-Rata Jam)
+  function updateStats(anggota) {
+    const totalJamEl = document.getElementById("totalJam");
+    const rataJamEl = document.getElementById("rataJam");
+
+    totalJamEl.textContent = anggota.totalJam;
+    rataJamEl.textContent = anggota.rataRataJam;
+  }
+
+  // Update aktivitas log
+  function updateActivityLog(anggota) {
+    const aktivitasLogEl = document.getElementById("aktivitasLog");
+
+    // Reset previous log
+    aktivitasLogEl.innerHTML = "";
+
+    // Contoh merender data aktivitas untuk anggota yang dipilih
+    if (anggota.aktivitas && anggota.aktivitas.length > 0) {
+      anggota.aktivitas.forEach(activity => {
+        const activityBox = document.createElement("div");
+        activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border", "border-gray-200");
+
+        const activityContent = document.createElement("p");
+        activityContent.classList.add("text-sm", "text-gray-700");
+        activityContent.innerHTML = `
+          <strong class="font-semibold">Waktu:</strong> ${activity.waktu}<br>
+          <strong class="font-semibold">Deskripsi:</strong> ${activity.deskripsi}
+        `;
+        
+        activityBox.appendChild(activityContent);
+        aktivitasLogEl.appendChild(activityBox);
+      });
+    } else {
+      const noActivityMessage = document.createElement("p");
+      noActivityMessage.classList.add("text-gray-500", "italic");
+      noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
+      aktivitasLogEl.appendChild(noActivityMessage);
+    }
+  }
+
+  // Populate the dropdown with member data
+  function populateDropdown(data) {
+    const select = document.getElementById("search");
+    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
+
+    data.forEach(anggota => {
+      const option = document.createElement("option");
+      option.value = anggota.nama;
+      option.textContent = anggota.nama;
+      select.appendChild(option);
+    });
+  }
+
+  // Load data anggota dari Google Sheets (gunakan OpenSheet API atau API lainnya)
+  async function loadSheetData() {
+    try {
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      fullData = data.map(member => ({
+        nama: member.NAMA,
+        jabatan: member.JABATAN || 'Tidak Ada Data',
+        totalJam: member.TOTAL_JAM || '0h 0m',
+        rataRataJam: member.RATA_RATA_JAM || '0h 0m',
+        aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
+      }));
+
+      populateDropdown(fullData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadSheetData);
+  document.getElementById("search").addEventListener("change", handleMemberSelection);
 </script>
 
 </body>
