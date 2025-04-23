@@ -13,7 +13,7 @@
   <header class="bg-primary-700 text-white px-6 py-4 shadow-lg">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-4">
-        <!-- Logo Check Log -->
+        <!-- Logo menggunakan ikon check -->
         <div class="w-10 h-10 bg-blue-500 text-white flex items-center justify-center rounded-full">
           <i class="fas fa-check text-xl"></i> <!-- Ikon check -->
         </div>
@@ -47,7 +47,7 @@
         </div>
         <div>
           <p id="nama" class="text-lg font-semibold"></p>
-          <p id="status" class="text-sm text-blue-100"></p>
+          <p id="jabatan" class="text-sm text-blue-100"></p>
         </div>
       </div>
     </section>
@@ -113,6 +113,7 @@
       return {
         nama: member.NAMA,
         status: member.JABATAN || 'Tidak Ada Data',
+        duty: member.DUTY || 'Tidak Ada Data',
         totalJam: member.TOTAL_JAM || '0h 0m',
         rataRataJam: member.RATA_RATA_JAM || '0h 0m',
         aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
@@ -162,9 +163,6 @@
     namaEl.textContent = anggota.nama;
     statusEl.innerHTML = `
       <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${anggota.status}</span>
-      <span class="bg-${getDutyColor(anggota.duty)}-100 text-${getDutyColor(anggota.duty)}-800 text-xs px-2 py-1 rounded-full ml-2">
-        ${anggota.duty}
-      </span>
     `;
   }
 
