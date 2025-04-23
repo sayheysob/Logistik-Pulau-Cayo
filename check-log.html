@@ -32,7 +32,7 @@
 <body class="bg-gray-50">
 
   <!-- Header -->
-  <header class="bg-green-600 text-white px-6 py-4 shadow-lg"> <!-- Fixed to green -->
+  <header class="bg-green-600 text-white px-6 py-4 shadow-lg">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-4">
         <div class="w-10 h-10 bg-blue-500 text-white flex items-center justify-center rounded-full">
@@ -70,17 +70,6 @@
         </div>
       </div>
     </section>
-
-    <div id="stats" class="grid grid-cols-2 gap-4 mb-6 hidden">
-      <div class="bg-white p-4 rounded-xl text-center shadow border border-gray-100">
-        <p class="text-sm text-gray-600 font-medium">Total Jam</p>
-        <p id="totalJam" class="text-xl font-bold text-blue-600">-</p>
-      </div>
-      <div class="bg-white p-4 rounded-xl text-center shadow border border-gray-100">
-        <p class="text-sm text-gray-600 font-medium">Rata-Rata Harian</p>
-        <p id="rataJam" class="text-xl font-bold text-blue-600">-</p>
-      </div>
-    </div>
 
     <div id="actionButtons" class="flex flex-wrap gap-3 justify-center mb-6 hidden">
       <button id="onDutyBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
@@ -198,64 +187,115 @@ function updateActivityLog(anggota) {
   }
 }
 
-// Update your `fullData` mapping to include activity sample data
-async function loadSheetData() {
-  try {
-    const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+  // Update your `fullData` mapping to include activity sample data
+  async function loadSheetData() {
+    try {
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
+      const response = await fetch(apiUrl);
+      const data = await response.json();
 
-    fullData = data.map(member => ({
-      nama: member.NAMA,
-      jabatan: member.JABATAN || 'Tidak Ada Data',
-      totalJam: member.TOTAL_JAM || '0h 0m',
-      rataRataJam: member.RATA_RATA_JAM || '0h 0m',
-      aktivitas: member.AKTIVITAS || []  // Assuming AKTIVITAS field contains the log data
-    }));
+      fullData = data.map(member => ({
+        nama: member.NAMA,
+        jabatan: member.JABATAN || 'Tidak Ada Data',
+        totalJam: member.TOTAL_JAM || '0h 0m',
+        rataRataJam: member.RATA_RATA_JAM || '0h 0m',
+        aktivitas: member.AKTIVITAS || []  // Assuming AKTIVITAS field contains the log data
+      }));
 
-    populateDropdown(fullData);
-  } catch (error) {
-    console.error('Error loading data:', error);
+      populateDropdown(fullData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   }
+
+  // Send status data to Google Sheets
+function sendToGoogleSheets(member, status, additionalInfo = {}) {
+  const currentDate = new Date();
+  const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
+  const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+  const requestData = {
+    memberName: member.nama,
+    jabatan: member.jabatan,
+    status: status,
+    date: dateString,
+    time: timeString,
+    ...additionalInfo // This will handle the extra fields for Cuti and Resign
+  };
+
+  fetch(googleSheetsAPI, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestData)
+  })
+  .then(response => response.json())
+  .then(data => console.log("Data berhasil dikirim ke Google Sheets:", data))
+  .catch(error => console.error("Terjadi kesalahan saat mengirim data ke Google Sheets:", error));
+}
+
+// Send notification to Discord Webhook
+function sendToDiscord(member, status, additionalInfo = {}) {
+  const currentDate = new Date();
+  const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
+  const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+  const message = {
+    content: `**Pengajuan ${status}** 📝\n
+    Nama: ${member.nama}\n
+    Posisi: ${member.jabatan}\n
+    Tanggal: ${dateString} ${timeString}\n
+    Alasan: ${additionalInfo.alasan || ''}\n
+    Status: ${status === 'Cuti' ? 'PENDING' : 'APPROVED'}`
+  };
+
+  fetch(discordWebhookURL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(message)
+  })
+  .then(response => response.json())
+  .then(data => console.log("Data berhasil dikirim ke Discord:", data))
+  .catch(error => console.error("Terjadi kesalahan saat mengirim data ke Discord:", error));
 }
 
 // Load data anggota dari Google Sheets (gunakan OpenSheet API atau API lainnya)
 async function loadSheetData() {
-  try {
-    const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+    try {
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
+      const response = await fetch(apiUrl);
+      const data = await response.json();
 
-    fullData = data.map(member => ({
-      nama: member.NAMA,
-      jabatan: member.JABATAN || 'Tidak Ada Data',
-      totalJam: member.TOTAL_JAM || '0h 0m',
-      rataRataJam: member.RATA_RATA_JAM || '0h 0m',
-      aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
-    }));
+      fullData = data.map(member => ({
+        nama: member.NAMA,
+        jabatan: member.JABATAN || 'Tidak Ada Data',
+        totalJam: member.TOTAL_JAM || '0h 0m',
+        rataRataJam: member.RATA_RATA_JAM || '0h 0m',
+        aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
+      }));
 
-    populateDropdown(fullData);
-  } catch (error) {
-    console.error('Error loading data:', error);
+      populateDropdown(fullData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+}
+
+  // Populate the dropdown with member data
+  function populateDropdown(data) {
+    const select = document.getElementById("search");
+    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
+
+    data.forEach(anggota => {
+      const option = document.createElement("option");
+      option.value = anggota.nama;
+      option.textContent = anggota.nama;
+      select.appendChild(option);
+    });
   }
-}
 
-// Populate the dropdown with member data
-function populateDropdown(data) {
-  const select = document.getElementById("search");
-  select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
-
-  data.forEach(anggota => {
-    const option = document.createElement("option");
-    option.value = anggota.nama;
-    option.textContent = anggota.nama;
-    select.appendChild(option);
-  });
-}
-
-// Call the loadSheetData function on page load
-document.addEventListener('DOMContentLoaded', loadSheetData);
-document.getElementById("search").addEventListener("change", handleMemberSelection);
+  document.addEventListener('DOMContentLoaded', loadSheetData);
+  document.getElementById("search").addEventListener("change", handleMemberSelection);
 </script>
 
 </body>
