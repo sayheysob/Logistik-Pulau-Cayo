@@ -84,7 +84,7 @@ function updateProfile(anggota) {
 }
 
 // Send status data to Google Sheets
-function sendToGoogleSheets(member, status) {
+function sendToGoogleSheets(member, status, additionalInfo = {}) {
   const currentDate = new Date();
   const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
   const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -94,7 +94,8 @@ function sendToGoogleSheets(member, status) {
     jabatan: member.jabatan,
     status: status,
     date: dateString,
-    time: timeString
+    time: timeString,
+    ...additionalInfo // This will handle the extra fields for Cuti and Resign
   };
 
   fetch(googleSheetsAPI, {
@@ -110,13 +111,13 @@ function sendToGoogleSheets(member, status) {
 }
 
 // Send notification to Discord Webhook
-function sendToDiscord(member, status) {
+function sendToDiscord(member, status, additionalInfo = {}) {
   const currentDate = new Date();
   const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
   const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
   const message = {
-    content: `Anggota ${status}: ${member.nama}\nJabatan: ${member.jabatan}\nTanggal: ${dateString}\nWaktu: ${timeString}`
+    content: `Anggota ${status}: ${member.nama}\nJabatan: ${member.jabatan}\nTanggal: ${dateString}\nWaktu: ${timeString}\n${additionalInfo ? `Alasan: ${additionalInfo.alasan || ''}\n` : ''}`
   };
 
   fetch(discordWebhookURL, {
@@ -144,14 +145,17 @@ document.getElementById("offDutyBtn").addEventListener('click', () => {
 
 document.getElementById("cutiBtn").addEventListener('click', () => {
   if (!currentMember) return alert("Pilih anggota terlebih dahulu.");
-  sendToGoogleSheets(currentMember, "Cuti");
-  sendToDiscord(currentMember, "Cuti");
+  const alasan = prompt("Masukkan alasan Cuti:");
+  sendToGoogleSheets(currentMember, "Cuti", { alasan });
+  sendToDiscord(currentMember, "Cuti", { alasan });
 });
 
 document.getElementById("resignBtn").addEventListener('click', () => {
   if (!currentMember) return alert("Pilih anggota terlebih dahulu.");
-  sendToGoogleSheets(currentMember, "Resign");
-  sendToDiscord(currentMember, "Resign");
+  const alasanIC = prompt("Masukkan alasan IC:");
+  const alasanOOC = prompt("Masukkan alasan OOC:");
+  sendToGoogleSheets(currentMember, "Resign", { alasanIC, alasanOOC });
+  sendToDiscord(currentMember, "Resign", { alasanIC, alasanOOC });
 });
 
 // Fetch and load the data
