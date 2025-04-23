@@ -10,11 +10,11 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="bg-gradient-to-r from-green-500 to-green-600">
-    <div class="max-w-5xl mx-auto flex justify-between items-center">
+  <header class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-6 shadow-xl rounded-b-xl">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-3">
         <img src="images/lpc.png" alt="Logo LPC" class="h-12 w-12 rounded-full">
-        <h1 text-2xl font-semibold">Logistik Pulau Cayo</h1>
+        <h1 class="text-2xl font-semibold">Logistik Pulau Cayo</h1>
       </div>
       <div class="flex items-center gap-4">
         <span id="current-time" class="text-sm"></span>
@@ -26,7 +26,7 @@
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow max-w-5xl mx-auto px-6 py-8 w-full">
+  <main class="flex-grow max-w-6xl mx-auto px-6 py-8 w-full">
     <div class="flex justify-between items-center mb-8">
       <div>
         <h2 class="text-2xl font-semibold">Selamat Datang, <span id="username">Anggota</span>!</h2>
@@ -39,15 +39,15 @@
 
     <!-- Grid Menu -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Trans Check Log -->
+      <!-- Check Log -->
       <a href="check-log.html" class="group block p-6 bg-white rounded-xl shadow hover:shadow-md transition-all duration-300 hover:border-l-4 hover:border-green-500">
         <div class="flex items-center mb-3">
           <div class="bg-blue-100 p-3 rounded-lg mr-4">
             <i class="fas fa-clipboard-check text-blue-600 text-xl"></i>
           </div>
-          <h3 class="text-lg font-semibold group-hover:text-green-600 transition">Check log</h3>
+          <h3 class="text-lg font-semibold group-hover:text-green-600 transition">Check Log</h3>
         </div>
-        <p class="text-sm text-gray-600 pl-16">Lihat dan Kelola Aktivitas On Duty, Off Duty, Cuti, Resign.</p>
+        <p class="text-sm text-gray-600 pl-16">Lihat dan kelola aktivitas On Duty, Off Duty, Cuti, Resign.</p>
       </a>
 
       <!-- Data Anggota -->
@@ -99,7 +99,7 @@
 
   <!-- Footer -->
   <footer class="bg-white py-4 border-t">
-    <div class="max-w-5xl mx-auto px-6 text-center text-gray-500 text-sm">
+    <div class="max-w-6xl mx-auto px-6 text-center text-gray-500 text-sm">
       &copy; 2025 Logistik Pulau Cayo - Sistem Manajemen Anggota
     </div>
   </footer>
