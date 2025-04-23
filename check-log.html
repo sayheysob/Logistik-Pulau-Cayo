@@ -66,6 +66,17 @@
         <span>Resign</span>
       </button>
     </div>
+
+    <section id="aktivitasSection" class="hidden">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-lg font-semibold">Aktivitas Terakhir</h3>
+        <button id="refreshBtn" class="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1">
+          <i class="fas fa-sync-alt"></i>
+          <span>Refresh</span>
+        </button>
+      </div>
+      <div id="aktivitasLog" class="space-y-3"></div>
+    </section>
   </main>
 
 <script>
@@ -81,6 +92,38 @@ const googleSheetsAPI = 'https://script.google.com/macros/s/AKfycbyGdg0vh2hZEhTn
 function updateProfile(anggota) {
   const namaEl = document.getElementById("nama");
   namaEl.textContent = anggota.nama;
+}
+
+// Update aktivitas log
+function updateActivityLog(anggota) {
+  const aktivitasLogEl = document.getElementById("aktivitasLog");
+
+  // Reset previous log
+  aktivitasLogEl.innerHTML = "";
+
+  // Example of rendering activity data for the selected member
+  if (anggota.aktivitas && anggota.aktivitas.length > 0) {
+    anggota.aktivitas.forEach(activity => {
+      const activityBox = document.createElement("div");
+      activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border", "border-gray-200");
+
+      const activityContent = document.createElement("p");
+      activityContent.classList.add("text-sm", "text-gray-700");
+      activityContent.innerHTML = `
+        <strong class="font-semibold">Waktu:</strong> ${activity.waktu}<br>
+        <strong class="font-semibold">Deskripsi:</strong> ${activity.deskripsi}
+      `;
+      
+      activityBox.appendChild(activityContent);
+      aktivitasLogEl.appendChild(activityBox);
+    });
+  } else {
+    // If no activities, show placeholder message
+    const noActivityMessage = document.createElement("p");
+    noActivityMessage.classList.add("text-gray-500", "italic");
+    noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
+    aktivitasLogEl.appendChild(noActivityMessage);
+  }
 }
 
 // Send status data to Google Sheets
@@ -135,12 +178,14 @@ document.getElementById("onDutyBtn").addEventListener('click', () => {
   if (!currentMember) return alert("Pilih anggota terlebih dahulu.");
   sendToGoogleSheets(currentMember, "On Duty");
   sendToDiscord(currentMember, "On Duty");
+  updateActivityLog(currentMember);
 });
 
 document.getElementById("offDutyBtn").addEventListener('click', () => {
   if (!currentMember) return alert("Pilih anggota terlebih dahulu.");
   sendToGoogleSheets(currentMember, "Off Duty");
   sendToDiscord(currentMember, "Off Duty");
+  updateActivityLog(currentMember);
 });
 
 document.getElementById("cutiBtn").addEventListener('click', () => {
@@ -148,6 +193,7 @@ document.getElementById("cutiBtn").addEventListener('click', () => {
   const alasan = prompt("Masukkan alasan Cuti:");
   sendToGoogleSheets(currentMember, "Cuti", { alasan });
   sendToDiscord(currentMember, "Cuti", { alasan });
+  updateActivityLog(currentMember);
 });
 
 document.getElementById("resignBtn").addEventListener('click', () => {
@@ -156,6 +202,7 @@ document.getElementById("resignBtn").addEventListener('click', () => {
   const alasanOOC = prompt("Masukkan alasan OOC:");
   sendToGoogleSheets(currentMember, "Resign", { alasanIC, alasanOOC });
   sendToDiscord(currentMember, "Resign", { alasanIC, alasanOOC });
+  updateActivityLog(currentMember);
 });
 
 // Fetch and load the data
@@ -199,6 +246,7 @@ document.getElementById("search").addEventListener("change", function() {
     updateProfile(currentMember);
     document.getElementById("profileCard").classList.remove("hidden");
     document.getElementById("actionButtons").classList.remove("hidden");
+    document.getElementById("aktivitasSection").classList.remove("hidden");
   }
 });
 </script>
