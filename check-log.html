@@ -165,39 +165,38 @@
     rataJamEl.textContent = anggota.rataRataJam;
   }
 
-  // Update aktivitas log (untuk sekarang hanya menunjukkan placeholder)
-   // Update aktivitas log
-  function updateActivityLog(anggota) {
-    const aktivitasLogEl = document.getElementById("aktivitasLog");
+  // Update aktivitas log
+function updateActivityLog(anggota) {
+  const aktivitasLogEl = document.getElementById("aktivitasLog");
 
-    // Reset previous log
-    aktivitasLogEl.innerHTML = "";
+  // Reset previous log
+  aktivitasLogEl.innerHTML = "";
 
-    // Example of rendering activity data for the selected member
-    // Here, you could format a more detailed log structure (if activity is stored)
-    if (anggota.aktivitas && anggota.aktivitas.length > 0) {
-      anggota.aktivitas.forEach(activity => {
-        const activityBox = document.createElement("div");
-        activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow", "border", "border-gray-200");
+  // Example of rendering activity data for the selected member
+  // Here, you could format a more detailed log structure (if activity is stored)
+  if (anggota.aktivitas && anggota.aktivitas.length > 0) {
+    anggota.aktivitas.forEach(activity => {
+      const activityBox = document.createElement("div");
+      activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border", "border-gray-200");
 
-        const activityContent = document.createElement("p");
-        activityContent.classList.add("text-sm", "text-gray-700");
-        activityContent.innerHTML = `
-          <strong>Waktu:</strong> ${activity.waktu}<br>
-          <strong>Deskripsi:</strong> ${activity.deskripsi}
-        `;
-        
-        activityBox.appendChild(activityContent);
-        aktivitasLogEl.appendChild(activityBox);
-      });
-    } else {
-      // No activities to show, display a placeholder message
-      const noActivityMessage = document.createElement("p");
-      noActivityMessage.classList.add("text-gray-500");
-      noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
-      aktivitasLogEl.appendChild(noActivityMessage);
-    }
+      const activityContent = document.createElement("p");
+      activityContent.classList.add("text-sm", "text-gray-700");
+      activityContent.innerHTML = `
+        <strong class="font-semibold">Waktu:</strong> ${activity.waktu}<br>
+        <strong class="font-semibold">Deskripsi:</strong> ${activity.deskripsi}
+      `;
+      
+      activityBox.appendChild(activityContent);
+      aktivitasLogEl.appendChild(activityBox);
+    });
+  } else {
+    // No activities to show, display a placeholder message
+    const noActivityMessage = document.createElement("p");
+    noActivityMessage.classList.add("text-gray-500", "italic");
+    noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
+    aktivitasLogEl.appendChild(noActivityMessage);
   }
+}
 
   // Update your `fullData` mapping to include activity sample data
   async function loadSheetData() {
