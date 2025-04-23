@@ -35,9 +35,8 @@
   <header class="bg-primary-700 text-white px-6 py-4 shadow-lg">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-4">
-        <!-- Ikon check dengan latar belakang biru -->
         <div class="w-10 h-10 bg-blue-500 text-white flex items-center justify-center rounded-full">
-          <i class="fas fa-check text-xl"></i> <!-- Ikon check -->
+          <i class="fas fa-check text-xl"></i>
         </div>
         <h1 class="text-xl font-bold">Check Log</h1>
       </div>
@@ -50,7 +49,6 @@
 
   <!-- Main Content -->
   <main class="flex-grow max-w-3xl mx-auto p-6 w-full">
-    <!-- Pilih Anggota -->
     <div class="mb-6 bg-white p-4 rounded-xl shadow">
       <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Pilih Anggota</label>
       <div class="relative">
@@ -61,7 +59,6 @@
       </div>
     </div>
 
-    <!-- Profile Card -->
     <section id="profileCard" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl p-4 mb-6 shadow-lg hidden">
       <div class="flex items-center gap-4">
         <div class="w-14 h-14 bg-white text-blue-700 flex items-center justify-center rounded-full shadow">
@@ -74,7 +71,6 @@
       </div>
     </section>
 
-    <!-- Stats -->
     <div id="stats" class="grid grid-cols-2 gap-4 mb-6 hidden">
       <div class="bg-white p-4 rounded-xl text-center shadow border border-gray-100">
         <p class="text-sm text-gray-600 font-medium">Total Jam</p>
@@ -86,7 +82,6 @@
       </div>
     </div>
 
-    <!-- Action Buttons -->
     <div id="actionButtons" class="flex flex-wrap gap-3 justify-center mb-6 hidden">
       <button id="onDutyBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
         <i class="fas fa-play-circle"></i>
@@ -106,7 +101,6 @@
       </button>
     </div>
 
-    <!-- Activity Log -->
     <section id="aktivitasSection" class="hidden">
       <div class="flex justify-between items-center mb-3">
         <h3 class="text-lg font-semibold">Aktivitas Terakhir</h3>
@@ -120,44 +114,36 @@
   </main>
 
 <script>
-  // Data anggota yang sudah dipilih
   let currentMember = null;
+  let fullData = [];  // Data anggota yang akan dimuat
 
-  // Webhook URL Discord (Ganti dengan URL Webhook Anda)
   const discordWebhookURL = "https://discord.com/api/webhooks/1363867371277648203/40njB0VoK7EslN6mvSFomiU9YDLV_X6OcZtECvlYtkN2eKs4mfdiQD5yJoG_Z76C1gGI";
-
-  // Google Apps Script Web App URL (Ganti dengan URL Web App Anda)
   const googleSheetsAPI = 'https://script.google.com/macros/s/AKfycbxz3bHSy3wGj_UW7A2QsrT0t6Mw_bwUgZnZiPPdzmnmql8JDbg9j_XOptldygwnu1zk/exec';
 
-  // Fungsi untuk mengirim data ke Discord Webhook
+  const profileCard = document.getElementById('profileCard');
+  const stats = document.getElementById('stats');
+  const actionButtons = document.getElementById('actionButtons');
+  const aktivitasSection = document.getElementById('aktivitasSection');
+
   function sendToDiscord(member) {
     const currentDate = new Date();
     const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
     const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-
-    // Pesan yang akan dikirim ke Webhook Discord
+    
     const message = {
       content: `Anggota On Duty: ${member.nama}\nJabatan: ${member.jabatan}\nTanggal: ${dateString}\nWaktu: ${timeString}`
     };
 
-    // Mengirim pesan ke Discord Webhook
     fetch(discordWebhookURL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(message)
     })
     .then(response => response.json())
-    .then(data => {
-      console.log("Data berhasil dikirim ke Discord:", data);
-    })
-    .catch(error => {
-      console.error("Terjadi kesalahan saat mengirim data ke Discord:", error);
-    });
+    .then(data => console.log("Data berhasil dikirim ke Discord:", data))
+    .catch(error => console.error("Terjadi kesalahan saat mengirim data ke Discord:", error));
   }
 
-  // Fungsi untuk menambahkan data ke Google Spreadsheet (On Duty)
   function sendToGoogleSheets(member) {
     const currentDate = new Date();
     const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
@@ -165,47 +151,32 @@
 
     const requestData = {
       memberName: member.nama,
-      jabatan: member.jabatan,  // Hanya jabatan yang dikirim
+      jabatan: member.jabatan,
       date: dateString,
       time: timeString
     };
 
-    // Kirim data ke Google Sheets menggunakan Google Apps Script Web App
     fetch(googleSheetsAPI, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestData)
     })
     .then(response => response.json())
-    .then(data => {
-      console.log("Data berhasil dikirim ke Google Sheets:", data);
-    })
-    .catch(error => {
-      console.error("Terjadi kesalahan saat mengirim data ke Google Sheets:", error);
-    });
+    .then(data => console.log("Data berhasil dikirim ke Google Sheets:", data))
+    .catch(error => console.error("Terjadi kesalahan saat mengirim data ke Google Sheets:", error));
   }
 
-  // Tombol On Duty
-  const onDutyBtn = document.getElementById("onDutyBtn");
-
-  // Event listener untuk tombol On Duty
-  onDutyBtn.addEventListener('click', function() {
+  document.getElementById('onDutyBtn').addEventListener('click', function() {
     if (!currentMember) {
       alert("Pilih anggota terlebih dahulu.");
       return;
     }
-
-    // Kirim data ke Webhook Discord dan Google Sheets (On Duty)
+    
     sendToDiscord(currentMember);
     sendToGoogleSheets(currentMember);
-
-    // Update UI dengan pesan status
     alert(`Anggota ${currentMember.nama} telah On Duty pada ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`);
   });
 
-  // Fungsi untuk mengupdate profil anggota yang dipilih
   function updateProfile(anggota) {
     const namaEl = document.getElementById("nama");
     const statusEl = document.getElementById("status");
@@ -216,7 +187,6 @@
     `;
   }
 
-  // Fungsi untuk menampilkan data anggota yang dipilih
   function handleMemberSelection() {
     const selectedName = this.value;
     if (!selectedName) {
@@ -231,14 +201,12 @@
     updateStats(currentMember);
     updateActivityLog(currentMember);
     
-    // Show all sections
     profileCard.classList.remove("hidden");
     stats.classList.remove("hidden");
     actionButtons.classList.remove("hidden");
     aktivitasSection.classList.remove("hidden");
   }
 
-  // Fungsi untuk mengupdate stats (Total Jam, Rata-Rata Jam)
   function updateStats(anggota) {
     const totalJamEl = document.getElementById("totalJam");
     const rataJamEl = document.getElementById("rataJam");
@@ -247,29 +215,30 @@
     rataJamEl.textContent = anggota.rataRataJam;
   }
 
-  // Mengambil data anggota dari Google Sheets (misalnya menggunakan OpenSheet API)
   async function loadSheetData() {
-    const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    fullData = data.map((member) => {
-      return {
+    try {
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      
+      fullData = data.map(member => ({
         nama: member.NAMA,
         jabatan: member.JABATAN || 'Tidak Ada Data',
         duty: member.DUTY || 'Tidak Ada Data',
         totalJam: member.TOTAL_JAM || '0h 0m',
         rataRataJam: member.RATA_RATA_JAM || '0h 0m',
-        aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
-      };
-    });
+        aktivitas: []  
+      }));
 
-    populateDropdown(fullData);
+      populateDropdown(fullData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   }
 
   function populateDropdown(data) {
     const select = document.getElementById("search");
-    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
+    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>';
 
     data.forEach(anggota => {
       const option = document.createElement("option");
@@ -279,7 +248,6 @@
     });
   }
 
-  // Initialize the page
   document.addEventListener('DOMContentLoaded', loadSheetData);
   document.getElementById("search").addEventListener("change", handleMemberSelection);
 </script>
