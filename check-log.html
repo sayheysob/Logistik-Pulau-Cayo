@@ -114,69 +114,15 @@
   </main>
 
 <script>
-  let currentMember = null;
+    let currentMember = null;
   let fullData = [];  // Data anggota yang akan dimuat
-
-  const discordWebhookURL = "https://discord.com/api/webhooks/1363867371277648203/40njB0VoK7EslN6mvSFomiU9YDLV_X6OcZtECvlYtkN2eKs4mfdiQD5yJoG_Z76C1gGI";
-  const googleSheetsAPI = 'https://script.google.com/macros/s/AKfycbxz3bHSy3wGj_UW7A2QsrT0t6Mw_bwUgZnZiPPdzmnmql8JDbg9j_XOptldygwnu1zk/exec';
 
   const profileCard = document.getElementById('profileCard');
   const stats = document.getElementById('stats');
   const actionButtons = document.getElementById('actionButtons');
   const aktivitasSection = document.getElementById('aktivitasSection');
 
-  function sendToDiscord(member) {
-    const currentDate = new Date();
-    const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
-    const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-    
-    const message = {
-      content: `Anggota On Duty: ${member.nama}\nJabatan: ${member.jabatan}\nTanggal: ${dateString}\nWaktu: ${timeString}`
-    };
-
-    fetch(discordWebhookURL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(message)
-    })
-    .then(response => response.json())
-    .then(data => console.log("Data berhasil dikirim ke Discord:", data))
-    .catch(error => console.error("Terjadi kesalahan saat mengirim data ke Discord:", error));
-  }
-
-  function sendToGoogleSheets(member) {
-    const currentDate = new Date();
-    const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
-    const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-
-    const requestData = {
-      memberName: member.nama,
-      jabatan: member.jabatan,
-      date: dateString,
-      time: timeString
-    };
-
-    fetch(googleSheetsAPI, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestData)
-    })
-    .then(response => response.json())
-    .then(data => console.log("Data berhasil dikirim ke Google Sheets:", data))
-    .catch(error => console.error("Terjadi kesalahan saat mengirim data ke Google Sheets:", error));
-  }
-
-  document.getElementById('onDutyBtn').addEventListener('click', function() {
-    if (!currentMember) {
-      alert("Pilih anggota terlebih dahulu.");
-      return;
-    }
-    
-    sendToDiscord(currentMember);
-    sendToGoogleSheets(currentMember);
-    alert(`Anggota ${currentMember.nama} telah On Duty pada ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`);
-  });
-
+  // Fungsi untuk mengupdate profil anggota yang dipilih
   function updateProfile(anggota) {
     const namaEl = document.getElementById("nama");
     const statusEl = document.getElementById("status");
@@ -187,6 +133,7 @@
     `;
   }
 
+  // Fungsi untuk menangani pemilihan anggota
   function handleMemberSelection() {
     const selectedName = this.value;
     if (!selectedName) {
@@ -197,16 +144,19 @@
     currentMember = fullData.find(a => a.nama === selectedName);
     if (!currentMember) return;
 
+    // Update profile, stats, and activity log
     updateProfile(currentMember);
     updateStats(currentMember);
     updateActivityLog(currentMember);
-    
+
+    // Remove the hidden class from all relevant sections to show them
     profileCard.classList.remove("hidden");
     stats.classList.remove("hidden");
     actionButtons.classList.remove("hidden");
     aktivitasSection.classList.remove("hidden");
   }
 
+  // Fungsi untuk mengupdate stats (Total Jam, Rata-Rata Jam)
   function updateStats(anggota) {
     const totalJamEl = document.getElementById("totalJam");
     const rataJamEl = document.getElementById("rataJam");
@@ -215,19 +165,26 @@
     rataJamEl.textContent = anggota.rataRataJam;
   }
 
+  // Update aktivitas log (untuk sekarang hanya menunjukkan placeholder)
+  function updateActivityLog(anggota) {
+    const aktivitasLogEl = document.getElementById("aktivitasLog");
+    aktivitasLogEl.innerHTML = `<p>Aktivitas terakhir untuk ${anggota.nama} (placeholder)</p>`;
+  }
+
+  // Load data anggota dari Google Sheets (gunakan OpenSheet API atau API lainnya)
   async function loadSheetData() {
     try {
       const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
       const response = await fetch(apiUrl);
       const data = await response.json();
-      
+
       fullData = data.map(member => ({
         nama: member.NAMA,
         jabatan: member.JABATAN || 'Tidak Ada Data',
         duty: member.DUTY || 'Tidak Ada Data',
         totalJam: member.TOTAL_JAM || '0h 0m',
         rataRataJam: member.RATA_RATA_JAM || '0h 0m',
-        aktivitas: []  
+        aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
       }));
 
       populateDropdown(fullData);
@@ -236,9 +193,10 @@
     }
   }
 
+  // Populate the dropdown with member data
   function populateDropdown(data) {
     const select = document.getElementById("search");
-    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>';
+    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
 
     data.forEach(anggota => {
       const option = document.createElement("option");
@@ -248,6 +206,7 @@
     });
   }
 
+  // Call the loadSheetData function on page load
   document.addEventListener('DOMContentLoaded', loadSheetData);
   document.getElementById("search").addEventListener("change", handleMemberSelection);
 </script>
