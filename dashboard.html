@@ -125,7 +125,7 @@
 
     // Get username from URL or localStorage if available
     const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('user') || localStorage.getItem('username') || 'Sobat!';
+    const username = urlParams.get('user') || localStorage.getItem('username') || 'Sobat';
     document.getElementById('username').textContent = username;
   </script>
 </body>
