@@ -2,242 +2,145 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Check Log - Logistik Pulau Cayo</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              300: '#86efac',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
   <style>
-    /* Flexbox untuk footer tetap di bawah */
-    html, body {
-      height: 100%;
-      margin: 0;
+    body {
+      background: linear-gradient(135deg,#e9f5ff 0%, #f9fafb 100%);
+      min-height: 100vh;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
       display: flex;
       flex-direction: column;
     }
-    main {
-      flex-grow: 1;
+    main.container {
+      padding-top: 2rem;
+      padding-bottom: 3rem;
+    }
+    section.card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(80,120,255,0.07), 0 2px 8px rgba(44,62,80,0.1);
+      margin-bottom: 2rem;
+      transition: box-shadow .18s;
+    }
+    section.card:hover {
+      box-shadow: 0 12px 32px rgba(80,120,255,0.15), 0 4px 16px rgba(44,62,80,0.1);
+    }
+    footer.container {
+      margin-top: auto;
+      padding: 2rem 0 .8rem 0;
+      text-align: center;
+      font-size: .9rem;
+      opacity: .65;
+      color: #364e6e;
     }
   </style>
 </head>
-<body class="bg-gray-50">
+<body>
+  <main class="container">
+    <hgroup>
+      <h2>Check Log</h2>
+      <h3>Logistik Pulau Cayo - Monitoring Anggota</h3>
+    </hgroup>
 
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-6 shadow-xl rounded-b-xl">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-6">
-        <div class="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full shadow-lg">
-          <i class="fas fa-check text-xl"></i>
-        </div>
-        <h1 class="text-2xl font-semibold">Check Log</h1>
-      </div>
-      <a href="dashboard.html" class="bg-primary-600 hover:bg-primary-800 px-5 py-3 rounded-lg transition duration-200 flex items-center gap-3 hover:scale-105">
-        <i class="fas fa-arrow-left"></i>
-        <span class="text-lg">Kembali ke Dashboard</span>
-      </a>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="flex-grow max-w-3xl mx-auto p-6 w-full">
-    <div class="mb-6 bg-white p-4 rounded-xl shadow-lg">
-      <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Pilih Anggota</label>
-      <div class="relative">
-        <select id="search" class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none transition-all">
-          <option value="" selected disabled>Pilih nama anggota...</option>
-        </select>
-        <i class="fas fa-user absolute left-3 top-3 text-gray-400"></i>
-      </div>
-    </div>
-
-    <!-- Profile Card -->
-    <section id="profileCard" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl p-4 mb-6 shadow-lg hidden">
-      <div class="flex items-center gap-4">
-        <div class="w-14 h-14 bg-white text-blue-700 flex items-center justify-center rounded-full shadow-lg">
-          <i class="fas fa-user text-xl"></i>
-        </div>
-        <div>
-          <p id="nama" class="text-lg font-semibold text-white"></p>
-          <p id="status" class="text-sm text-blue-100"></p>
-        </div>
-      </div>
+    <!-- Pilih Anggota -->
+    <section class="card">
+      <label for="search">Pilih Anggota</label>
+      <select id="search" required>
+        <option value="">Pilih nama anggota...</option>
+      </select>
     </section>
 
-    <!-- Stats -->
-    <div id="stats" class="grid grid-cols-2 gap-4 mb-6 hidden">
-      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100">
-        <p class="text-sm text-gray-600 font-medium">Total Jam</p>
-        <p id="totalJam" class="text-xl font-bold text-blue-600">-</p>
-      </div>
-      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100">
-        <p class="text-sm text-gray-600 font-medium">Rata-Rata Harian</p>
-        <p id="rataJam" class="text-xl font-bold text-blue-600">-</p>
-      </div>
-    </div>
+    <!-- Kartu Profil -->
+    <section class="card" id="profileCard" hidden>
+      <h3 id="nama">Nama Anggota</h3>
+      <p id="status" style="margin-bottom: 0;"></p>
+    </section>
 
-    <!-- Action Buttons -->
-    <div id="actionButtons" class="flex flex-wrap gap-3 justify-center mb-6 hidden">
-      <button id="onDutyBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
-        <i class="fas fa-play-circle"></i>
-        <span>On Duty</span>
-      </button>
-      <button id="offDutyBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
-        <i class="fas fa-stop-circle"></i>
-        <span>Off Duty</span>
-      </button>
-      <button id="cutiBtn" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
-        <i class="fas fa-umbrella-beach"></i>
-        <span>Cuti</span>
-      </button>
-      <button id="resignBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Resign</span>
-      </button>
-    </div>
+    <!-- Statistik -->
+    <section class="card" id="stats" hidden>
+      <h4>Statistik Kehadiran</h4>
+      <p><strong>Total Jam:</strong> <span id="totalJam">-</span></p>
+      <p><strong>Rata-Rata Harian:</strong> <span id="rataJam">-</span></p>
+    </section>
 
-    <!-- Aktivitas -->
-    <section id="aktivitasSection" class="hidden">
-      <div class="flex justify-between items-center mb-3">
-        <h3 class="text-lg font-semibold">Aktivitas Terakhir</h3>
-        <button id="refreshBtn" class="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1">
-          <i class="fas fa-sync-alt"></i>
-          <span>Refresh</span>
-        </button>
-      </div>
-      <div id="aktivitasLog" class="space-y-3"></div>
+    <!-- Aktivitas Terakhir -->
+    <section class="card" id="aktivitasSection" hidden>
+      <h4>Aktivitas Terakhir</h4>
+      <div id="aktivitasLog"></div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white py-4 border-t">
-    <div class="max-w-6xl mx-auto px-6 text-center text-gray-500 text-sm">
-      &copy; 2025 Logistik Pulau Cayo - Sistem Manajemen Anggota
-    </div>
+  <footer class="container">
+    <small>&copy; 2025 Logistik Pulau Cayo • Sistem Monitoring Anggota</small>
   </footer>
 
 <script>
-  // Data untuk anggota (ini bisa diambil dari API atau sumber lain)
   let currentMember = null;
-  let fullData = [];  // Data anggota yang akan dimuat
+  let fullData = [];
 
-  // Referensi elemen
   const profileCard = document.getElementById('profileCard');
   const stats = document.getElementById('stats');
-  const actionButtons = document.getElementById('actionButtons');
   const aktivitasSection = document.getElementById('aktivitasSection');
 
-  // Fungsi untuk mengupdate profil anggota yang dipilih
   function updateProfile(anggota) {
-    const namaEl = document.getElementById("nama");
-    const statusEl = document.getElementById("status");
-
-    namaEl.textContent = anggota.nama;
-    statusEl.innerHTML = `
-      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${anggota.jabatan}</span>
-    `;
+    document.getElementById("nama").textContent = anggota.nama;
+    document.getElementById("status").innerHTML = `<em>${anggota.jabatan}</em>`;
   }
 
-  // Fungsi untuk menangani pemilihan anggota
   function handleMemberSelection() {
     const selectedName = this.value;
-    if (!selectedName) {
-      return; // Tidak lanjut jika tidak ada anggota yang dipilih
-    }
-
+    if (!selectedName) return;
     currentMember = fullData.find(a => a.nama === selectedName);
     if (!currentMember) return;
 
-    // Update profile, stats, and activity log
     updateProfile(currentMember);
     updateStats(currentMember);
     updateActivityLog(currentMember);
 
-    // Menghilangkan class hidden untuk menampilkan elemen
-    profileCard.classList.remove("hidden");
-    stats.classList.remove("hidden");
-    actionButtons.classList.remove("hidden");
-    aktivitasSection.classList.remove("hidden");
+    profileCard.hidden = false;
+    stats.hidden = false;
+    aktivitasSection.hidden = false;
   }
 
-  // Fungsi untuk mengupdate stats (Total Jam, Rata-Rata Jam)
   function updateStats(anggota) {
-    const totalJamEl = document.getElementById("totalJam");
-    const rataJamEl = document.getElementById("rataJam");
-
-    totalJamEl.textContent = anggota.totalJam;
-    rataJamEl.textContent = anggota.rataRataJam;
+    document.getElementById("totalJam").textContent = anggota.totalJam;
+    document.getElementById("rataJam").textContent = anggota.rataRataJam;
   }
 
-  // Update aktivitas log
   function updateActivityLog(anggota) {
-    const aktivitasLogEl = document.getElementById("aktivitasLog");
+    const log = document.getElementById("aktivitasLog");
+    log.innerHTML = "";
 
-    // Reset previous log
-    aktivitasLogEl.innerHTML = "";
-
-    // Contoh merender data aktivitas untuk anggota yang dipilih
     if (anggota.aktivitas && anggota.aktivitas.length > 0) {
-      anggota.aktivitas.forEach(activity => {
-        const activityBox = document.createElement("div");
-        activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border", "border-gray-200");
-
-        const activityContent = document.createElement("p");
-        activityContent.classList.add("text-sm", "text-gray-700");
-        activityContent.innerHTML = `
-          <strong class="font-semibold">Waktu:</strong> ${activity.waktu}<br>
-          <strong class="font-semibold">Deskripsi:</strong> ${activity.deskripsi}
-        `;
-        
-        activityBox.appendChild(activityContent);
-        aktivitasLogEl.appendChild(activityBox);
+      anggota.aktivitas.forEach(act => {
+        const p = document.createElement("p");
+        p.innerHTML = `<strong>${act.waktu}</strong>: ${act.deskripsi}`;
+        log.appendChild(p);
       });
     } else {
-      const noActivityMessage = document.createElement("p");
-      noActivityMessage.classList.add("text-gray-500", "italic");
-      noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
-      aktivitasLogEl.appendChild(noActivityMessage);
+      const p = document.createElement("p");
+      p.innerHTML = "<em>Tidak ada aktivitas tercatat.</em>";
+      log.appendChild(p);
     }
   }
 
-  // Populate the dropdown with member data
   function populateDropdown(data) {
     const select = document.getElementById("search");
-    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
-
+    select.innerHTML = '<option value="">Pilih nama anggota...</option>';
     data.forEach(anggota => {
-      const option = document.createElement("option");
-      option.value = anggota.nama;
-      option.textContent = anggota.nama;
-      select.appendChild(option);
+      const opt = document.createElement("option");
+      opt.value = anggota.nama;
+      opt.textContent = anggota.nama;
+      select.appendChild(opt);
     });
   }
 
-  // Load data anggota dari Google Sheets (gunakan OpenSheet API atau API lainnya)
   async function loadSheetData() {
     try {
-      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
-      const response = await fetch(apiUrl);
+      const response = await fetch('https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota');
       const data = await response.json();
 
       fullData = data.map(member => ({
@@ -245,12 +148,12 @@
         jabatan: member.JABATAN || 'Tidak Ada Data',
         totalJam: member.TOTAL_JAM || '0h 0m',
         rataRataJam: member.RATA_RATA_JAM || '0h 0m',
-        aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
+        aktivitas: [] // Bisa diisi dari sumber lain
       }));
 
       populateDropdown(fullData);
-    } catch (error) {
-      console.error('Error loading data:', error);
+    } catch (e) {
+      console.error('Gagal memuat data:', e);
     }
   }
 
