@@ -5,52 +5,128 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard - Logistik Pulau Cayo</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-<header class="bg-green-700 text-white px-6 py-4 flex justify-between items-center">
-  <div class="flex items-center gap-3">
-    <img src="images/lpc.png" alt="Logo LPC" class="h-12 w-12 rounded-full">
-    <h1 class="text-xl font-bold">Logistik Pulau Cayo</h1>
-  </div>
-</header>
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-6 shadow-xl rounded-b-xl">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="images/lpc.png" alt="Logo LPC" class="h-12 w-12 rounded-full">
+        <h1 class="text-2xl font-semibold">Logistik Pulau Cayo</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="current-time" class="text-sm"></span>
+        <a href="index.html" class="text-sm hover:text-green-200 transition">
+          <i class="fas fa-sign-out-alt mr-1"></i> Logout
+        </a>
+      </div>
+    </div>
+  </header>
 
   <!-- Main Content -->
-  <main class="max-w-5xl mx-auto px-6 py-10">
-    <h2 class="text-2xl font-semibold mb-6">Selamat Datang, Admin!</h2>
+  <main class="flex-grow max-w-6xl mx-auto px-6 py-8 w-full">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-semibold">Selamat Datang, <span id="username">Sobat!</span>!</h2>
+        <p class="text-gray-500 mt-1">Apa yang ingin Anda lakukan hari ini?</p>
+      </div>
+      <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm">
+        <i class="fas fa-circle text-green-500 mr-2"></i> Online
+      </div>
+    </div>
 
     <!-- Grid Menu -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Trans Check Log -->
-      <a href="trans-check-log.html" class="block p-6 bg-white rounded-xl shadow hover:bg-blue-50 transition">
-        <h3 class="text-lg font-semibold mb-2">Trans Check Log</h3>
-        <p class="text-sm text-gray-600">Lihat dan kelola status tugas anggota.</p>
+      <!-- Check Log -->
+      <a href="check-log.html" class="group block p-6 bg-white rounded-xl shadow hover:shadow-md transition-all duration-300 hover:border-l-4 hover:border-green-500">
+        <div class="flex items-center mb-3">
+          <div class="bg-blue-100 p-3 rounded-lg mr-4">
+            <i class="fas fa-clipboard-check text-blue-600 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold group-hover:text-green-600 transition">Check Log</h3>
+        </div>
+        <p class="text-sm text-gray-600 pl-16">Lihat dan kelola aktivitas On Duty, Off Duty, Cuti, Resign.</p>
       </a>
 
       <!-- Data Anggota -->
-      <a href="data-anggota.html" class="block p-6 bg-white rounded-xl shadow hover:bg-blue-50 transition">
-        <h3 class="text-lg font-semibold mb-2">Data Anggota</h3>
-        <p class="text-sm text-gray-600">Lihat daftar dan detail anggota tim.</p>
+      <a href="data-anggota.html" class="group block p-6 bg-white rounded-xl shadow hover:shadow-md transition-all duration-300 hover:border-l-4 hover:border-green-500">
+        <div class="flex items-center mb-3">
+          <div class="bg-purple-100 p-3 rounded-lg mr-4">
+            <i class="fas fa-users text-purple-600 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold group-hover:text-green-600 transition">Data Anggota</h3>
+        </div>
+        <p class="text-sm text-gray-600 pl-16">Lihat daftar dan detail anggota tim anda.</p>
       </a>
 
       <!-- Rekapitulasi -->
-      <a href="rekapitulasi.html" class="block p-6 bg-white rounded-xl shadow hover:bg-blue-50 transition">
-        <h3 class="text-lg font-semibold mb-2">Rekapitulasi</h3>
-        <p class="text-sm text-gray-600">Rekap total jam kerja dan aktivitas.</p>
+      <a href="dashboard.html" class="group block p-6 bg-white rounded-xl shadow hover:shadow-md transition-all duration-300 hover:border-l-4 hover:border-green-500">
+        <div class="flex items-center mb-3">
+          <div class="bg-orange-100 p-3 rounded-lg mr-4">
+            <i class="fas fa-chart-bar text-orange-600 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold group-hover:text-green-600 transition">Rekapitulasi</h3>
+        </div>
+        <p class="text-sm text-gray-600 pl-16">Rekap total jam kerja dan aktivitas.</p>
       </a>
+    </div>
 
-      <!-- Pengaturan -->
-      <a href="pengaturan.html" class="block p-6 bg-white rounded-xl shadow hover:bg-blue-50 transition">
-        <h3 class="text-lg font-semibold mb-2">Pengaturan</h3>
-        <p class="text-sm text-gray-600">Kelola akses, hak admin, dan lainnya.</p>
-      </a>
+    <!-- Quick Stats -->
+    <div class="mt-10 bg-white rounded-xl shadow p-6">
+      <h3 class="text-lg font-semibold mb-4">Statistik Cepat</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Jumlah Anggota</p>
+          <p class="text-2xl font-semibold">27</p>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Setoran Bulan Ini</p>
+          <p class="text-2xl font-semibold">10000</p>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Setoran Selesai</p>
+          <p class="text-2xl font-semibold">7000</p>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Setoran Tertunda</p>
+          <p class="text-2xl font-semibold">3000</p>
+        </div>
+      </div>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="text-center py-4 text-gray-500 text-sm">
-    &copy; 2025 Logistik Pulau Cayo
+  <footer class="bg-white py-4 border-t">
+    <div class="max-w-6xl mx-auto px-6 text-center text-gray-500 text-sm">
+      &copy; 2025 Logistik Pulau Cayo - Sistem Manajemen Anggota
+    </div>
   </footer>
 
+  <script>
+    // Update current time
+    function updateTime() {
+      const now = new Date();
+      const options = { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      document.getElementById('current-time').textContent = now.toLocaleDateString('id-ID', options);
+    }
+    
+    // Set initial time and update every minute
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Get username from URL or localStorage if available
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('user') || localStorage.getItem('username') || 'Sobat';
+    document.getElementById('username').textContent = username;
+  </script>
 </body>
 </html>
