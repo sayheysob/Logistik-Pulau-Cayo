@@ -2,99 +2,100 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Logistik Pulau Cayo</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beranda - Logistik Pulau Cayo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg,#e9f5ff 0%, #f9fafb 100%);
+      min-height: 100vh;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+    main.container {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    .card-link {
+      display: block;
+      padding: 2rem;
+      border-radius: 1rem;
+      background: white;
+      box-shadow: 0 8px 24px rgba(80,120,255,0.05), 0 2px 8px rgba(44,62,80,0.08);
+      text-decoration: none;
+      color: #212121;
+      transition: box-shadow .2s ease, transform .1s ease;
+    }
+    .card-link:hover {
+      box-shadow: 0 12px 32px rgba(80,120,255,0.1), 0 4px 12px rgba(44,62,80,0.1);
+      transform: translateY(-4px);
+    }
+    footer.container {
+      margin-top: auto;
+      padding: 2rem 0 .8rem 0;
+      text-align: center;
+      font-size: .9rem;
+      opacity: .65;
+      color: #364e6e;
+    }
+    #dateTime {
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #2c3e50;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body>
 
-  <!-- Header -->
-  <!-- Header Minimalis -->
-<header class="bg-green-600 text-white px-6 py-4 shadow-md">
-  <div class="max-w-5xl mx-auto flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <div class="h-10 w-10 bg-white rounded-full flex items-center justify-center">
-        <span class="text-green-600 font-bold text-lg">LPC</span>
-      </div>
-      <h1 class="text-xl font-semibold">Logistik Pulau Cayo</h1>
+  <nav class="container-fluid">
+    <ul>
+      <li><strong>Logistik Pulau Cayo</strong></li>
+    </ul>
+    <ul>
+      <li id="dateTime">Memuat waktu...</li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <hgroup>
+      <h2>Selamat Datang</h2>
+      <h3>Sistem Monitoring Logistik Pulau Cayo</h3>
+    </hgroup>
+
+    <div class="grid">
+      <a class="card-link" href="check-log.html">
+        <h3>Check Log</h3>
+        <p>Monitoring aktivitas anggota secara real-time.</p>
+      </a>
+      <a class="card-link" href="data-anggota.html">
+        <h3>Data Anggota</h3>
+        <p>Lihat dan kelola data anggota tim logistik.</p>
+      </a>
+      <a class="card-link" href="rekapitulasi.html">
+        <h3>Rekapitulasi</h3>
+        <p>Laporan rekapitulasi kehadiran dan aktivitas anggota.</p>
+      </a>
     </div>
-    <div class="flex items-center gap-4 text-sm">
-      <span id="current-time"></span>
-      <a href="index.html" class="underline hover:text-green-200 transition">Logout</a>
-    </div>
-  </div>
-</header>
-
-  <!-- Main -->
-  <main class="flex-grow max-w-5xl mx-auto px-4 py-8 w-full">
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold">Selamat Datang, <span id="username">Sobat</span>!</h2>
-      <p class="text-gray-600 mt-1">Silakan pilih menu aktivitas di bawah ini.</p>
-    </section>
-
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <a href="check-log.html" class="bg-white p-4 rounded-lg shadow hover:shadow-md transition border border-transparent hover:border-green-500">
-        <h3 class="font-semibold text-lg mb-1">Check Log</h3>
-        <p class="text-sm text-gray-500">Kelola status On Duty, Off Duty, Cuti, Resign.</p>
-      </a>
-      <a href="data-anggota.html" class="bg-white p-4 rounded-lg shadow hover:shadow-md transition border border-transparent hover:border-green-500">
-        <h3 class="font-semibold text-lg mb-1">Data Anggota</h3>
-        <p class="text-sm text-gray-500">Lihat dan atur daftar anggota.</p>
-      </a>
-      <a href="dashboard.html" class="bg-white p-4 rounded-lg shadow hover:shadow-md transition border border-transparent hover:border-green-500">
-        <h3 class="font-semibold text-lg mb-1">Rekapitulasi</h3>
-        <p class="text-sm text-gray-500">Rekap jam kerja dan aktivitas tim.</p>
-      </a>
-    </section>
-
-    <section class="mt-10 bg-white p-6 rounded-lg shadow">
-      <h3 class="text-lg font-semibold mb-4">Statistik Ringkas</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div>
-          <p class="text-sm text-gray-500">Jumlah Anggota</p>
-          <p class="text-xl font-bold">27</p>
-        </div>
-        <div>
-          <p class="text-sm text-gray-500">Setoran Bulan Ini</p>
-          <p class="text-xl font-bold">10.000</p>
-        </div>
-        <div>
-          <p class="text-sm text-gray-500">Setoran Selesai</p>
-          <p class="text-xl font-bold">7.000</p>
-        </div>
-        <div>
-          <p class="text-sm text-gray-500">Setoran Tertunda</p>
-          <p class="text-xl font-bold">3.000</p>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="text-center text-sm text-gray-500 py-4 bg-white border-t">
-    &copy; 2025 Logistik Pulau Cayo
+  <footer class="container">
+    <small>&copy; 2025 Logistik Pulau Cayo • Sistem Monitoring</small>
   </footer>
 
-  <script>
-    function updateTime() {
-      const now = new Date();
-      const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      };
-      document.getElementById('current-time').textContent = now.toLocaleDateString('id-ID', options);
-    }
+<script>
+  function updateDateTime() {
+    const el = document.getElementById("dateTime");
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const time = now.toLocaleTimeString('id-ID');
+    const date = now.toLocaleDateString('id-ID', options);
+    el.textContent = `${date} • ${time}`;
+  }
 
-    updateTime();
-    setInterval(updateTime, 60000);
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+</script>
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('user') || localStorage.getItem('username') || 'Sobat';
-    document.getElementById('username').textContent = username;
-  </script>
 </body>
 </html>
