@@ -28,31 +28,43 @@
       }
     }
   </script>
+  <style>
+    /* Flexbox untuk footer tetap di bawah */
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex-grow: 1;
+    }
+  </style>
 </head>
 <body class="bg-gray-50">
 
   <!-- Header -->
-  <header class="bg-green-600 text-white px-6 py-4 shadow-lg">
+  <header class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-6 shadow-xl rounded-b-xl">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <div class="w-10 h-10 bg-blue-500 text-white flex items-center justify-center rounded-full">
+      <div class="flex items-center gap-6">
+        <div class="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full shadow-lg">
           <i class="fas fa-check text-xl"></i>
         </div>
-        <h1 class="text-xl font-bold">Check Log</h1>
+        <h1 class="text-2xl font-semibold">Check Log</h1>
       </div>
-      <a href="dashboard.html" class="bg-primary-600 hover:bg-primary-800 px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2">
+      <a href="dashboard.html" class="bg-primary-600 hover:bg-primary-800 px-5 py-3 rounded-lg transition duration-200 flex items-center gap-3 hover:scale-105">
         <i class="fas fa-arrow-left"></i>
-        <span>Kembali ke Dashboard</span>
+        <span class="text-lg">Kembali ke Dashboard</span>
       </a>
     </div>
   </header>
 
   <!-- Main Content -->
   <main class="flex-grow max-w-3xl mx-auto p-6 w-full">
-    <div class="mb-6 bg-white p-4 rounded-xl shadow">
+    <div class="mb-6 bg-white p-4 rounded-xl shadow-lg">
       <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Pilih Anggota</label>
       <div class="relative">
-        <select id="search" class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none">
+        <select id="search" class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none transition-all">
           <option value="" selected disabled>Pilih nama anggota...</option>
         </select>
         <i class="fas fa-user absolute left-3 top-3 text-gray-400"></i>
@@ -62,11 +74,11 @@
     <!-- Profile Card -->
     <section id="profileCard" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl p-4 mb-6 shadow-lg hidden">
       <div class="flex items-center gap-4">
-        <div class="w-14 h-14 bg-white text-blue-700 flex items-center justify-center rounded-full shadow">
+        <div class="w-14 h-14 bg-white text-blue-700 flex items-center justify-center rounded-full shadow-lg">
           <i class="fas fa-user text-xl"></i>
         </div>
         <div>
-          <p id="nama" class="text-lg font-semibold"></p>
+          <p id="nama" class="text-lg font-semibold text-white"></p>
           <p id="status" class="text-sm text-blue-100"></p>
         </div>
       </div>
@@ -74,11 +86,11 @@
 
     <!-- Stats -->
     <div id="stats" class="grid grid-cols-2 gap-4 mb-6 hidden">
-      <div class="bg-white p-4 rounded-xl text-center shadow border border-gray-100">
+      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100">
         <p class="text-sm text-gray-600 font-medium">Total Jam</p>
         <p id="totalJam" class="text-xl font-bold text-blue-600">-</p>
       </div>
-      <div class="bg-white p-4 rounded-xl text-center shadow border border-gray-100">
+      <div class="bg-white p-4 rounded-xl text-center shadow-lg border border-gray-100">
         <p class="text-sm text-gray-600 font-medium">Rata-Rata Harian</p>
         <p id="rataJam" class="text-xl font-bold text-blue-600">-</p>
       </div>
@@ -86,25 +98,25 @@
 
     <!-- Action Buttons -->
     <div id="actionButtons" class="flex flex-wrap gap-3 justify-center mb-6 hidden">
-      <button id="onDutyBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="onDutyBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
         <i class="fas fa-play-circle"></i>
         <span>On Duty</span>
       </button>
-      <button id="offDutyBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="offDutyBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
         <i class="fas fa-stop-circle"></i>
         <span>Off Duty</span>
       </button>
-      <button id="cutiBtn" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="cutiBtn" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
         <i class="fas fa-umbrella-beach"></i>
         <span>Cuti</span>
       </button>
-      <button id="resignBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
+      <button id="resignBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition pulse">
         <i class="fas fa-sign-out-alt"></i>
         <span>Resign</span>
       </button>
     </div>
 
-    <!-- Activity Log Section -->
+    <!-- Aktivitas -->
     <section id="aktivitasSection" class="hidden">
       <div class="flex justify-between items-center mb-3">
         <h3 class="text-lg font-semibold">Aktivitas Terakhir</h3>
@@ -117,158 +129,133 @@
     </section>
   </main>
 
+  <!-- Footer -->
+  <footer class="bg-white py-4 border-t">
+    <div class="max-w-6xl mx-auto px-6 text-center text-gray-500 text-sm">
+      &copy; 2025 Logistik Pulau Cayo - Sistem Manajemen Anggota
+    </div>
+  </footer>
+
 <script>
-// Data for members
-let currentMember = null;
-let fullData = [];  // Data anggota yang akan dimuat
+  // Data untuk anggota (ini bisa diambil dari API atau sumber lain)
+  let currentMember = null;
+  let fullData = [];  // Data anggota yang akan dimuat
 
-// References to DOM elements
-const profileCard = document.getElementById('profileCard');
-const stats = document.getElementById('stats');
-const actionButtons = document.getElementById('actionButtons');
-const aktivitasSection = document.getElementById('aktivitasSection');
+  // Referensi elemen
+  const profileCard = document.getElementById('profileCard');
+  const stats = document.getElementById('stats');
+  const actionButtons = document.getElementById('actionButtons');
+  const aktivitasSection = document.getElementById('aktivitasSection');
 
-// Function to update the profile of the selected member
-function updateProfile(anggota) {
-  const namaEl = document.getElementById("nama");
-  const statusEl = document.getElementById("status");
+  // Fungsi untuk mengupdate profil anggota yang dipilih
+  function updateProfile(anggota) {
+    const namaEl = document.getElementById("nama");
+    const statusEl = document.getElementById("status");
 
-  namaEl.textContent = anggota.nama;
-  statusEl.innerHTML = `
-    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${anggota.jabatan}</span>
-  `;
-}
-
-// Function to handle member selection
-function handleMemberSelection() {
-  const selectedName = this.value;
-  if (!selectedName) {
-    return; // Do nothing if no member is selected
+    namaEl.textContent = anggota.nama;
+    statusEl.innerHTML = `
+      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${anggota.jabatan}</span>
+    `;
   }
 
-  currentMember = fullData.find(a => a.nama === selectedName);
-  if (!currentMember) return;
+  // Fungsi untuk menangani pemilihan anggota
+  function handleMemberSelection() {
+    const selectedName = this.value;
+    if (!selectedName) {
+      return; // Tidak lanjut jika tidak ada anggota yang dipilih
+    }
 
-  // Update profile, stats, and activity log
-  updateProfile(currentMember);
-  updateStats(currentMember);
-  updateActivityLog(currentMember);
+    currentMember = fullData.find(a => a.nama === selectedName);
+    if (!currentMember) return;
 
-  // Show relevant sections by removing the hidden class
-  profileCard.classList.remove("hidden");
-  stats.classList.remove("hidden");
-  actionButtons.classList.remove("hidden");
-  aktivitasSection.classList.remove("hidden");
-}
+    // Update profile, stats, and activity log
+    updateProfile(currentMember);
+    updateStats(currentMember);
+    updateActivityLog(currentMember);
 
-// Function to update the stats (Total Hours, Average Hours)
-function updateStats(anggota) {
-  const totalJamEl = document.getElementById("totalJam");
-  const rataJamEl = document.getElementById("rataJam");
+    // Menghilangkan class hidden untuk menampilkan elemen
+    profileCard.classList.remove("hidden");
+    stats.classList.remove("hidden");
+    actionButtons.classList.remove("hidden");
+    aktivitasSection.classList.remove("hidden");
+  }
 
-  totalJamEl.textContent = anggota.totalJam;
-  rataJamEl.textContent = anggota.rataRataJam;
-}
+  // Fungsi untuk mengupdate stats (Total Jam, Rata-Rata Jam)
+  function updateStats(anggota) {
+    const totalJamEl = document.getElementById("totalJam");
+    const rataJamEl = document.getElementById("rataJam");
 
-// Update the activity log
-function updateActivityLog(anggota) {
-  const aktivitasLogEl = document.getElementById("aktivitasLog");
+    totalJamEl.textContent = anggota.totalJam;
+    rataJamEl.textContent = anggota.rataRataJam;
+  }
 
-  // Clear previous logs
-  aktivitasLogEl.innerHTML = "";
+  // Update aktivitas log
+  function updateActivityLog(anggota) {
+    const aktivitasLogEl = document.getElementById("aktivitasLog");
 
-  // Check if there are activities to display
-  if (anggota.aktivitas && anggota.aktivitas.length > 0) {
-    anggota.aktivitas.forEach(activity => {
-      const activityBox = document.createElement("div");
-      activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border", "border-gray-200");
+    // Reset previous log
+    aktivitasLogEl.innerHTML = "";
 
-      const activityContent = document.createElement("p");
-      activityContent.classList.add("text-sm", "text-gray-700");
-      activityContent.innerHTML = `
-        <strong class="font-semibold">Waktu:</strong> ${activity.waktu}<br>
-        <strong class="font-semibold">Deskripsi:</strong> ${activity.deskripsi}
-      `;
-      
-      activityBox.appendChild(activityContent);
-      aktivitasLogEl.appendChild(activityBox);
+    // Contoh merender data aktivitas untuk anggota yang dipilih
+    if (anggota.aktivitas && anggota.aktivitas.length > 0) {
+      anggota.aktivitas.forEach(activity => {
+        const activityBox = document.createElement("div");
+        activityBox.classList.add("bg-white", "p-4", "rounded-lg", "shadow-lg", "border", "border-gray-200");
+
+        const activityContent = document.createElement("p");
+        activityContent.classList.add("text-sm", "text-gray-700");
+        activityContent.innerHTML = `
+          <strong class="font-semibold">Waktu:</strong> ${activity.waktu}<br>
+          <strong class="font-semibold">Deskripsi:</strong> ${activity.deskripsi}
+        `;
+        
+        activityBox.appendChild(activityContent);
+        aktivitasLogEl.appendChild(activityBox);
+      });
+    } else {
+      const noActivityMessage = document.createElement("p");
+      noActivityMessage.classList.add("text-gray-500", "italic");
+      noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
+      aktivitasLogEl.appendChild(noActivityMessage);
+    }
+  }
+
+  // Populate the dropdown with member data
+  function populateDropdown(data) {
+    const select = document.getElementById("search");
+    select.innerHTML = '<option value="" selected disabled>Pilih nama anggota...</option>'; // Reset dropdown
+
+    data.forEach(anggota => {
+      const option = document.createElement("option");
+      option.value = anggota.nama;
+      option.textContent = anggota.nama;
+      select.appendChild(option);
     });
-  } else {
-    const noActivityMessage = document.createElement("p");
-    noActivityMessage.classList.add("text-gray-500", "italic");
-    noActivityMessage.textContent = "Tidak ada aktivitas terbaru untuk anggota ini.";
-    aktivitasLogEl.appendChild(noActivityMessage);
   }
-}
 
-// Function to handle Cuti Request and send Discord message
-function handleCutiRequest() {
-  if (!currentMember) return alert("Pilih anggota terlebih dahulu.");
+  // Load data anggota dari Google Sheets (gunakan OpenSheet API atau API lainnya)
+  async function loadSheetData() {
+    try {
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
+      const response = await fetch(apiUrl);
+      const data = await response.json();
 
-  // Create the Cuti request message
-  const alasan = prompt("Masukkan alasan Cuti:");
-  const startDate = "23/04/2025";
-  const endDate = "27/04/2025";
+      fullData = data.map(member => ({
+        nama: member.NAMA,
+        jabatan: member.JABATAN || 'Tidak Ada Data',
+        totalJam: member.TOTAL_JAM || '0h 0m',
+        rataRataJam: member.RATA_RATA_JAM || '0h 0m',
+        aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
+      }));
 
-  const status = "PENDING"; // You can change it based on approval logic
-
-  // Send to Discord webhook
-  sendToDiscord(currentMember, "Pengajuan Cuti", { alasan, startDate, endDate, status });
-  alert("Pengajuan Cuti telah dikirim!");
-}
-
-// Function to send Cuti request data to Discord
-function sendToDiscord(member, status, additionalInfo = {}) {
-  const currentDate = new Date();
-  const dateString = currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' });
-  const timeString = currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-
-  const message = {
-    content: `**Pengajuan ${status}** 📝\n
-    Nama: ${member.nama}\n
-    Posisi: ${member.jabatan}\n
-    Tanggal: ${additionalInfo.startDate} - ${additionalInfo.endDate}\n
-    Alasan: ${additionalInfo.alasan}\n
-    Status: ${additionalInfo.status}\n
-    Waktu: ${timeString} - ${dateString}`
-  };
-
-  fetch('YOUR_DISCORD_WEBHOOK_URL', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(message)
-  })
-  .then(response => response.json())
-  .then(data => console.log("Data berhasil dikirim ke Discord:", data))
-  .catch(error => console.error("Terjadi kesalahan saat mengirim data ke Discord:", error));
-}
-
-// Load data anggota (fetch from API)
-async function loadSheetData() {
-  try {
-    const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    fullData = data.map(member => ({
-      nama: member.NAMA,
-      jabatan: member.JABATAN || 'Tidak Ada Data',
-      totalJam: member.TOTAL_JAM || '0h 0m',
-      rataJam: member.RATA_RATA_JAM || '0h 0m',
-      aktivitas: []  // Aktivitas kosong, bisa ditambahkan nanti
-    }));
-
-    populateDropdown(fullData);
-  } catch (error) {
-    console.error('Error loading data:', error);
+      populateDropdown(fullData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   }
-}
 
-document.addEventListener('DOMContentLoaded', loadSheetData);
-document.getElementById("search").addEventListener("change", handleMemberSelection);
-
-// Add the Cuti Request handler to the Cuti button
-document.getElementById("cutiBtn").addEventListener("click", handleCutiRequest);
+  document.addEventListener('DOMContentLoaded', loadSheetData);
+  document.getElementById("search").addEventListener("change", handleMemberSelection);
 </script>
 
 </body>
