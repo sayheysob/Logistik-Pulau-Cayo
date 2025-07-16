@@ -2,38 +2,60 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Laporan - Trans Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rekap Tugas - Logistik Pulau Cayo</title>
+
+  <!-- Tailwind CSS & Font -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-</head>
-<body class="bg-gray-100">
 
-  <!-- Header -->
-  <header class="bg-blue-700 text-white px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Laporan</h1>
-    <a href="index.html" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">Kembali ke Dashboard</a>
-  </header>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #a0e9ff 0%, #ffffff 80%);
+      color: #1e3a8a;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="w-full bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center py-5 px-6">
+      <div class="flex items-center gap-4">
+        <img src="images/lpc.png" alt="Logo" class="w-12 h-12 rounded-full shadow-md">
+        <span class="text-2xl font-extrabold text-teal-700 drop-shadow">Logistik Pulau Cayo</span>
+      </div>
+      <a href="index.html" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+        <i class="fas fa-home"></i> Beranda
+      </a>
+    </div>
+  </nav>
 
   <!-- Main -->
-  <main class="max-w-6xl mx-auto px-6 py-10">
+  <main class="container mx-auto px-6 py-10 flex-grow">
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-semibold">Rekap Laporan Tugas</h2>
-      <button id="exportBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export PDF</button>
+      <h1 class="text-3xl font-bold text-teal-800">Rekap Laporan Tugas</h1>
+      <button id="exportBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        <i class="fas fa-file-pdf mr-2"></i> Export PDF
+      </button>
     </div>
 
     <!-- Filter -->
-    <div class="mb-6 flex flex-col sm:flex-row gap-4">
+    <div class="flex flex-col sm:flex-row gap-4 mb-6">
       <input type="text" id="searchNama" placeholder="Cari nama..." class="border px-3 py-2 rounded w-full sm:w-1/3">
       <input type="month" id="filterBulan" class="border px-3 py-2 rounded w-full sm:w-1/3">
     </div>
 
-    <!-- Tabel -->
-    <div class="overflow-x-auto">
-      <table id="laporanTable" class="min-w-full bg-white shadow rounded-xl">
-        <thead class="bg-blue-600 text-white">
+    <!-- Table -->
+    <div class="overflow-x-auto shadow border border-teal-200 rounded-xl bg-white/90">
+      <table id="laporanTable" class="min-w-full">
+        <thead class="bg-teal-600 text-white">
           <tr>
             <th class="py-3 px-4 text-left">Nama</th>
             <th class="py-3 px-4 text-left">Tanggal</th>
@@ -43,32 +65,8 @@
             <th class="py-3 px-4 text-left">Total Jam</th>
           </tr>
         </thead>
-        <tbody id="laporanBody">
-          <!-- Contoh Data -->
-          <tr>
-            <td class="py-3 px-4">Nansu S Harmony</td>
-            <td class="py-3 px-4">2025-04-20</td>
-            <td class="py-3 px-4">Pengiriman Barang</td>
-            <td class="py-3 px-4">08:00</td>
-            <td class="py-3 px-4">16:00</td>
-            <td class="py-3 px-4">8</td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4">Dewi Rahayu</td>
-            <td class="py-3 px-4">2025-04-20</td>
-            <td class="py-3 px-4">Administrasi</td>
-            <td class="py-3 px-4">09:00</td>
-            <td class="py-3 px-4">17:00</td>
-            <td class="py-3 px-4">8</td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4">Budi Santoso</td>
-            <td class="py-3 px-4">2025-04-21</td>
-            <td class="py-3 px-4">Maintenance</td>
-            <td class="py-3 px-4">07:00</td>
-            <td class="py-3 px-4">15:00</td>
-            <td class="py-3 px-4">8</td>
-          </tr>
+        <tbody id="laporanBody" class="text-teal-900 divide-y divide-teal-100">
+          <!-- Data akan dimuat lewat script -->
         </tbody>
         <tfoot class="bg-gray-100 font-semibold">
           <tr>
@@ -80,54 +78,81 @@
     </div>
   </main>
 
-  <footer class="text-center py-4 text-gray-500 text-sm">
-    &copy; 2025 Trans Management System
+  <!-- Footer -->
+  <footer class="bg-white/80 backdrop-blur-md text-center py-6 border-t border-teal-300 text-teal-800 text-sm font-semibold">
+    &copy; 2025 Logistik Pulau Cayo • Sistem Rekapitulasi Tugas
   </footer>
 
   <!-- Script -->
   <script>
-    // Hitung Total Jam
-    function hitungTotalJam() {
-      let total = 0;
-      document.querySelectorAll('#laporanBody tr').forEach(row => {
-        if (row.style.display !== 'none') {
-          const jam = parseFloat(row.children[5].textContent || 0);
-          if (!isNaN(jam)) total += jam;
-        }
-      });
-      document.getElementById('totalJam').textContent = total;
+    let dataLaporan = [];
+
+    async function ambilData() {
+      try {
+        const url = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Laporan';
+        const res = await fetch(url);
+        const data = await res.json();
+        dataLaporan = data.map(row => ({
+          nama: row.NAMA,
+          tanggal: row.TANGGAL,
+          tugas: row.TUGAS,
+          masuk: row.MASUK,
+          keluar: row.KELUAR,
+          total: parseFloat(row.TOTAL_JAM)
+        }));
+        renderTabel(dataLaporan);
+      } catch (e) {
+        console.error("Gagal memuat data:", e);
+      }
     }
 
-    // Filter Tabel
-    function filterLaporan() {
-      const namaInput = document.getElementById('searchNama').value.toLowerCase();
-      const bulanInput = document.getElementById('filterBulan').value;
-      document.querySelectorAll('#laporanBody tr').forEach(row => {
-        const nama = row.children[0].textContent.toLowerCase();
-        const tanggal = row.children[1].textContent;
-        const cocokNama = nama.includes(namaInput);
-        const cocokBulan = !bulanInput || tanggal.startsWith(bulanInput);
-        row.style.display = (cocokNama && cocokBulan) ? '' : 'none';
+    function renderTabel(data) {
+      const tbody = document.getElementById("laporanBody");
+      tbody.innerHTML = "";
+      let totalJam = 0;
+
+      data.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="py-3 px-4">${item.nama}</td>
+          <td class="py-3 px-4">${item.tanggal}</td>
+          <td class="py-3 px-4">${item.tugas}</td>
+          <td class="py-3 px-4">${item.masuk}</td>
+          <td class="py-3 px-4">${item.keluar}</td>
+          <td class="py-3 px-4">${item.total}</td>
+        `;
+        tbody.appendChild(tr);
+        totalJam += item.total || 0;
       });
-      hitungTotalJam();
+
+      document.getElementById("totalJam").textContent = totalJam;
     }
 
-    // Event Listener
-    document.getElementById('searchNama').addEventListener('input', filterLaporan);
-    document.getElementById('filterBulan').addEventListener('input', filterLaporan);
+    function filterData() {
+      const namaFilter = document.getElementById("searchNama").value.toLowerCase();
+      const bulanFilter = document.getElementById("filterBulan").value;
 
-    // Export ke PDF
-    document.getElementById('exportBtn').addEventListener('click', () => {
+      const filtered = dataLaporan.filter(item => {
+        const cocokNama = item.nama.toLowerCase().includes(namaFilter);
+        const cocokBulan = !bulanFilter || item.tanggal.startsWith(bulanFilter);
+        return cocokNama && cocokBulan;
+      });
+
+      renderTabel(filtered);
+    }
+
+    document.getElementById("searchNama").addEventListener("input", filterData);
+    document.getElementById("filterBulan").addEventListener("input", filterData);
+
+    document.getElementById("exportBtn").addEventListener("click", () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       doc.text("Laporan Tugas", 14, 15);
 
       const rows = [];
-      document.querySelectorAll('#laporanBody tr').forEach(row => {
-        if (row.style.display !== 'none') {
-          const cols = [...row.children].map(td => td.textContent.trim());
-          rows.push(cols);
-        }
+      document.querySelectorAll("#laporanBody tr").forEach(row => {
+        const cols = [...row.children].map(td => td.textContent.trim());
+        rows.push(cols);
       });
 
       doc.autoTable({
@@ -136,12 +161,10 @@
         startY: 25,
       });
 
-      doc.save("laporan.pdf");
+      doc.save("laporan_tugas.pdf");
     });
 
-    // Hitung saat load
-    hitungTotalJam();
+    window.addEventListener("DOMContentLoaded", ambilData);
   </script>
-
 </body>
 </html>
