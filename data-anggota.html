@@ -7,126 +7,115 @@
   
   <!-- Tailwind & Font Awesome -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Tailwind Config -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              300: '#86efac',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
-            }
-          }
-        }
-      }
+  <style>
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(180deg, #a0e9ff 0%, #ffffff 70%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1e3a8a;
+      overflow-x: hidden;
     }
-  </script>
+  </style>
 </head>
-<body class="bg-gray-50">
+<body class="flex flex-col min-h-screen">
 
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-6 shadow-xl rounded-b-xl">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-6">
-        <i class="fas fa-users text-2xl"></i>
-        <h1 class="text-2xl font-semibold">Data Anggota</h1>
+  <!-- Navbar -->
+  <nav class="w-full bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex flex-wrap items-center justify-between py-5 px-6 md:px-0">
+      <div class="flex items-center space-x-3">
+        <img alt="Logo Logistik Pulau Cayo" class="w-12 h-12 rounded-full shadow-md" src="images/lpc_png.png" />
+        <span class="text-3xl font-extrabold text-teal-700 select-none tracking-wide drop-shadow-md">
+          Logistik Pulau Cayo
+        </span>
       </div>
-      <a href="dashboard.html" class="bg-primary-600 hover:bg-primary-800 px-5 py-3 rounded-lg transition duration-200 flex items-center gap-3 hover:scale-105">
-        <i class="fas fa-arrow-left"></i>
-        <span class="text-lg">Kembali ke Dashboard</span>
+      <a href="index.html" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg shadow-sm text-sm font-medium flex items-center gap-2">
+        <i class="fas fa-home"></i> Beranda
       </a>
     </div>
-  </header>
+  </nav>
 
   <!-- Main -->
-  <main class="max-w-6xl mx-auto px-6 py-8">
-    <div class="flex justify-between items-center mb-8">
-      <div>
-        <h2 class="text-2xl font-semibold text-gray-800">Daftar Anggota</h2>
-        <p class="text-gray-500 mt-1">Kelola data anggota tim Logistik Pulau Cayo</p>
-      </div>
-      <div class="relative">
+  <main class="container mx-auto flex-grow px-6 py-20 md:py-24 relative z-10">
+    <header class="mb-12 text-center max-w-3xl mx-auto">
+      <h1 class="text-5xl font-extrabold text-teal-900 mb-4 tracking-tight drop-shadow-lg">Data Anggota</h1>
+      <p class="text-xl md:text-2xl text-teal-700 font-semibold tracking-wide max-w-xl mx-auto leading-relaxed drop-shadow-sm">
+        Daftar & informasi anggota tim logistik Pulau Cayo.
+      </p>
+    </header>
+
+    <!-- Search & Table -->
+    <div class="mb-8 max-w-4xl mx-auto">
+      <div class="relative mb-6">
         <input 
           type="text" 
           id="searchInput"
-          placeholder="Cari nama anggota..." 
-          class="border border-gray-300 px-4 py-2 pl-10 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-lg transition-all"
+          placeholder="Cari nama atau jabatan..." 
+          class="w-full p-4 pl-12 rounded-xl border border-teal-300 shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-teal-900"
         >
-        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+        <i class="fas fa-search absolute left-4 top-4 text-teal-400"></i>
       </div>
-    </div>
 
-    <!-- Tabel Anggota -->
-    <div class="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
-      <table class="min-w-full bg-white">
-        <thead class="bg-gradient-to-r from-green-500 to-green-600 text-white">
-          <tr>
-            <th class="py-4 px-6 text-left rounded-tl-xl">Nomor</th>
-            <th class="py-4 px-6 text-left">Nama</th>
-            <th class="py-4 px-6 text-left rounded-tr-xl">Jabatan</th>
-          </tr>
-        </thead>
-        <tbody id="anggotaTable" class="divide-y divide-gray-200">
-          <!-- Data akan di-load lewat JavaScript -->
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pagination -->
-    <div class="mt-6 flex justify-between items-center">
-      <div class="text-sm text-gray-500">
-        Menampilkan <span id="showingCount">0</span> anggota
+      <div class="overflow-x-auto rounded-2xl shadow-lg border border-teal-200 bg-white/90">
+        <table class="min-w-full">
+          <thead class="bg-teal-600 text-white">
+            <tr>
+              <th class="py-4 px-6 text-left rounded-tl-xl">No</th>
+              <th class="py-4 px-6 text-left">Nama</th>
+              <th class="py-4 px-6 text-left rounded-tr-xl">Jabatan</th>
+            </tr>
+          </thead>
+          <tbody id="anggotaTable" class="divide-y divide-teal-100 text-teal-800">
+            <!-- Baris anggota dimuat via JavaScript -->
+          </tbody>
+        </table>
       </div>
-      <div class="flex gap-2">
-        <button id="prevPage" class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 transition-all" style="display: none;">
-          <i class="fas fa-chevron-left"></i> Sebelumnya
-        </button>
-        <span id="pageNumber" class="px-4 py-2 border rounded-lg bg-gray-100 text-gray-800">Halaman 1</span>
-        <button id="nextPage" class="px-4 py-2 border rounded-lg bg-green-600 text-white hover:bg-green-700 transition-all">
-          &gt;
-        </button>
+
+      <!-- Pagination -->
+      <div class="mt-6 flex justify-between items-center text-teal-800">
+        <div class="text-sm">
+          Menampilkan <span id="showingCount">0</span> anggota
+        </div>
+        <div class="flex gap-2">
+          <button id="prevPage" class="px-4 py-2 border rounded-lg text-teal-700 hover:bg-teal-100 hidden">
+            <i class="fas fa-chevron-left"></i> Sebelumnya
+          </button>
+          <span id="pageNumber" class="px-4 py-2 border rounded-lg bg-teal-100 text-teal-800">Halaman 1</span>
+          <button id="nextPage" class="px-4 py-2 border rounded-lg bg-teal-600 text-white hover:bg-teal-700">
+            Selanjutnya <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   </main>
 
-  <footer class="bg-white py-4 border-t">
-    <div class="max-w-6xl mx-auto px-6 text-center text-gray-500 text-sm">
-      &copy; 2025 Logistik Pulau Cayo - Sistem Manajemen Anggota
+  <!-- Footer -->
+  <footer class="w-full bg-white/80 backdrop-blur-md border-t border-teal-300 shadow-inner relative z-10">
+    <div class="container mx-auto py-6 px-6 text-center text-teal-900 text-sm select-none font-semibold tracking-wide drop-shadow-sm">
+      © 2025 Logistik Pulau Cayo • Sistem Manajemen Anggota
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/tabletop@1.6.0/tabletop.min.js"></script>
-
-  <!-- Ambil Data dari Google Sheets -->
+  <!-- Script -->
   <script>
     let currentPage = 1;
     const itemsPerPage = 10;
     let fullData = [];
 
     async function loadSheetData() {
-      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota'; // URL API untuk spreadsheet Anda
+      const apiUrl = 'https://opensheet.elk.sh/149mLW4EvpeoNbIXS_FwEgo489yjQa1l7kFuwvcUBxCg/Anggota';
       const response = await fetch(apiUrl);
       const data = await response.json();
-      
-      // Menyimpan data penuh untuk pencarian
-      fullData = data.map((member, index) => {
-        return {
-          nomor: member.NO,
-          nama: member.NAMA,
-          jabatan: member.JABATAN
-        };
-      });
+
+      fullData = data.map((member) => ({
+        nomor: member.NO,
+        nama: member.NAMA,
+        jabatan: member.JABATAN
+      }));
 
       renderTable(fullData);
       handlePagination(fullData);
@@ -139,48 +128,31 @@
       
       const tbody = document.getElementById("anggotaTable");
       tbody.innerHTML = "";
-      let count = 0;
-
-      currentItems.forEach((member) => {
+      currentItems.forEach(member => {
         const tr = document.createElement("tr");
-        tr.classList.add("hover:bg-gray-50", "transition-all"); // Hover effect for rows
+        tr.className = "hover:bg-teal-50 transition";
         tr.innerHTML = `
           <td class="py-4 px-6">${member.nomor}</td>
           <td class="py-4 px-6">${member.nama}</td>
           <td class="py-4 px-6">${member.jabatan}</td>
         `;
         tbody.appendChild(tr);
-        count++;
       });
 
-      document.getElementById("showingCount").textContent = count;
+      document.getElementById("showingCount").textContent = currentItems.length;
     }
 
     function handlePagination(data) {
       const totalPages = Math.ceil(data.length / itemsPerPage);
-      const nextPageButton = document.getElementById("nextPage");
-      const prevPageButton = document.getElementById("prevPage");
-      const pageNumber = document.getElementById("pageNumber");
+      const prevBtn = document.getElementById("prevPage");
+      const nextBtn = document.getElementById("nextPage");
+      const pageLabel = document.getElementById("pageNumber");
 
-      // Menampilkan nomor halaman
-      pageNumber.textContent = `Halaman ${currentPage}`;
+      pageLabel.textContent = `Halaman ${currentPage}`;
+      prevBtn.style.display = currentPage <= 1 ? 'none' : 'inline-block';
+      nextBtn.style.display = currentPage >= totalPages ? 'none' : 'inline-block';
 
-      // Menyembunyikan tombol previous pada halaman 1
-      if (currentPage <= 1) {
-        prevPageButton.style.display = 'none';
-      } else {
-        prevPageButton.style.display = 'inline-block';
-      }
-
-      // Menyembunyikan tombol next pada halaman terakhir
-      if (currentPage >= totalPages) {
-        nextPageButton.style.display = 'none';
-      } else {
-        nextPageButton.style.display = 'inline-block';
-      }
-
-      // Previous page button
-      prevPageButton.onclick = () => {
+      prevBtn.onclick = () => {
         if (currentPage > 1) {
           currentPage--;
           renderTable(data);
@@ -188,8 +160,7 @@
         }
       };
 
-      // Next page button
-      nextPageButton.onclick = () => {
+      nextBtn.onclick = () => {
         if (currentPage < totalPages) {
           currentPage++;
           renderTable(data);
@@ -198,18 +169,18 @@
       };
     }
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-      const searchTerm = this.value.toLowerCase();
-      const filteredData = fullData.filter(member => 
-        member.nama.toLowerCase().includes(searchTerm) || 
-        member.jabatan.toLowerCase().includes(searchTerm)
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const keyword = this.value.toLowerCase();
+      const filtered = fullData.filter(member =>
+        member.nama.toLowerCase().includes(keyword) ||
+        member.jabatan.toLowerCase().includes(keyword)
       );
-
-      renderTable(filteredData);
-      handlePagination(filteredData);
+      currentPage = 1;
+      renderTable(filtered);
+      handlePagination(filtered);
     });
 
-    window.addEventListener("DOMContentLoaded", loadSheetData);
+    window.addEventListener('DOMContentLoaded', loadSheetData);
   </script>
 </body>
 </html>
