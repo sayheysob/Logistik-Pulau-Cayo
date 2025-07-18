@@ -139,28 +139,10 @@
 
     try {
       // Kirim ke Google Sheet
-      await fetch("https://tabib-pulau.vercel.app/api/absensi", { // ganti endpoint sesuai Apps Script kamu
+      await fetch("https://script.google.com/macros/s/AKfycbz9mr09o1McF6jH03JzWqzra6kRx-RjZn5NpeF6JJUC_CXHPo5msU3PbOecyhBGlTSn/exec", { // ganti endpoint sesuai Apps Script kamu
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataAbsensi)
-      });
-
-      // Kirim ke Discord
-      await fetch("https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          embeds: [{
-            title: "📋 Absensi Logistik Pulau Cayo",
-            color: status === "On Duty" ? 3066993 : 15158332,
-            fields: [
-              { name: "Nama", value: nama, inline: true },
-              { name: "Status", value: status, inline: true },
-              { name: "Waktu", value: `${tanggal} - ${waktu}`, inline: false }
-            ],
-            footer: { text: "Logistik Pulau Cayo" }
-          }]
-        })
       });
 
       document.getElementById("status").textContent = `Status tersimpan: ${status} pada ${waktu}`;
