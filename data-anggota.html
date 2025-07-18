@@ -111,12 +111,11 @@
       const response = await fetch(apiUrl);
       const data = await response.json();
 
-      fullData = data.map((member) => ({
-        nomor: member.NO,
-        nama: member.NAMA,
-        jabatan: member.JABATAN
-      }));
-
+      fullData = data.map((member, index) => ({
+      nomor: member.NO,
+      nama: member["Nama Anggota"], 
+      jabatan: member["Jabatan"]
+}));
       renderTable(fullData);
       handlePagination(fullData);
     }
